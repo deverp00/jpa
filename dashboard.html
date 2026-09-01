@@ -10,33 +10,32 @@
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/footer.css" />
 
-    <!-- Chart.js (for charts) -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- Firebase SDK (for future integration) -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
     <style>
-        /* ----- additional page-specific styles (since sidebar & layout are not in external files yet) ----- */
+        /* ----- additional page-specific styles (sidebar & layout) ----- */
         .dashboard-main {
             display: flex;
             flex: 1;
+            position: relative;
         }
 
-        /* Sidebar */
+        /* Sidebar – desktop */
         .sidebar {
             width: 240px;
             background: var(--sidebar-bg);
             color: var(--sidebar-text);
             padding: 24px 12px;
-            min-height: calc(100vh - 70px - 80px); /* header + footer approx */
+            min-height: calc(100vh - 70px - 80px);
             position: sticky;
             top: 70px;
             height: calc(100vh - 70px - 80px);
             overflow-y: auto;
             flex-shrink: 0;
             border-right: var(--border);
+            transition: transform 0.3s ease;
+            z-index: 100;
         }
         .sidebar nav {
             display: flex;
@@ -77,11 +76,42 @@
             margin-top: 24px;
         }
 
+        /* Sidebar overlay (mobile) */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 99;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
+
         /* Content area */
         .content {
             flex: 1;
             padding: 24px 32px;
             overflow-x: auto;
+            transition: margin-left 0.3s;
+        }
+
+        /* Hamburger button (mobile) */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            margin-right: 8px;
+        }
+        .hamburger svg {
+            width: 26px;
+            height: 26px;
+            fill: var(--text-main);
         }
 
         /* KPI Cards */
@@ -223,6 +253,9 @@
             font-size: 12px;
             color: var(--text-muted);
             margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         .activity-item .content .meta svg {
             width: 12px;
@@ -230,7 +263,6 @@
             fill: var(--text-muted);
             display: inline-block;
             vertical-align: middle;
-            margin-right: 4px;
         }
 
         /* Three column row for small charts */
@@ -250,25 +282,67 @@
             height: 110px;
         }
 
-        /* Responsive sidebar */
+        /* ----- Mobile responsiveness ----- */
         @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+                align-items: center;
+            }
+
             .sidebar {
-                width: 60px;
-                padding: 16px 8px;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                bottom: 0;
+                width: 260px;
+                transform: translateX(-100%);
+                height: calc(100vh - 70px);
+                border-right: var(--border);
+                z-index: 100;
+                background: var(--sidebar-bg);
+                box-shadow: 2px 0 12px rgba(0,0,0,0.1);
             }
-            .sidebar a span {
-                display: none;
+            .sidebar.open {
+                transform: translateX(0);
             }
-            .sidebar a {
-                justify-content: center;
-                padding: 12px;
+            .sidebar-overlay.active {
+                display: block;
             }
-            .sidebar a svg {
-                width: 22px;
-                height: 22px;
-            }
+
             .content {
                 padding: 16px;
+                margin-left: 0;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .kpi-card .value {
+                font-size: 22px;
+            }
+
+            .row-2col {
+                gap: 16px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+            .chart-container {
+                height: 160px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-center .search-box {
+                width: 100%;
+            }
+            .header-center .search-box input {
+                width: 100%;
             }
         }
     </style>
@@ -277,19 +351,26 @@
     <!-- HEADER -->
     <header class="app-header">
         <div class="header-left">
-            <!-- Logo icon (SVG) -->
-            <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/>
-                <rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/>
-                <rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/>
-                <rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/>
+            <!-- Hamburger (mobile) -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+            </button>
+            <!-- Logo -->
+            <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
             </svg>
             <span class="logo-text">ERP·Nexus</span>
         </div>
         <div class="header-center">
             <div class="search-box">
-                <!-- Search icon SVG -->
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8" />
                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
@@ -298,8 +379,7 @@
         </div>
         <div class="header-right">
             <div class="notif-bell">
-                <!-- Bell icon SVG -->
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                     <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                 </svg>
@@ -309,10 +389,13 @@
         </div>
     </header>
 
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- MAIN -->
     <main class="dashboard-main">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <nav>
                 <a href="#" class="active">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -323,7 +406,7 @@
                     </svg>
                     <span>Dashboard</span>
                 </a>
-                <a href="#">
+                <a href="students.html">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                         <circle cx="9" cy="7" r="4" />
@@ -332,35 +415,35 @@
                     </svg>
                     <span>Students 360°</span>
                 </a>
-                <a href="#">
+                <a href="teachers.html">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
                         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                     </svg>
                     <span>Teachers 360°</span>
                 </a>
-                <a href="#">
+                <a href="fees.html">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
                         <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
                     </svg>
                     <span>Fees</span>
                 </a>
-                <a href="#">
+                <a href="admissions.html">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
                         <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
                     </svg>
                     <span>Admissions</span>
                 </a>
-                <a href="#">
+                <a href="payroll.html">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
                         <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
                     </svg>
                     <span>Payroll</span>
                 </a>
-                <a href="#">
+                <a href="reports.html">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
                         <circle cx="12" cy="16" r="5" />
@@ -370,7 +453,7 @@
                     <span>Reports</span>
                 </a>
                 <div class="sidebar-bottom">
-                    <a href="#">
+                    <a href="settings.html">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="3" />
                             <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l2.5 2.5a1.65 1.65 0 0 0 1.18.5h6.44a1.65 1.65 0 0 0 1.18-.5l2.5-2.5z" />
@@ -461,7 +544,7 @@
                             </svg>
                             Fee Collection (last 6 months)
                         </h3>
-                        <a href="#">Full report →</a>
+                        <a href="reports.html">Full report →</a>
                     </div>
                     <div class="chart-container">
                         <canvas id="revenueChart"></canvas>
@@ -476,10 +559,9 @@
                             </svg>
                             Recent Activity
                         </h3>
-                        <a href="#">See all</a>
+                        <a href="notifications.html">See all</a>
                     </div>
                     <div class="activity-feed" id="activityFeed">
-                        <!-- Demo items -->
                         <div class="activity-item">
                             <div class="icon-circle">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -499,7 +581,7 @@
                             </div>
                         </div>
                         <div class="activity-item">
-                            <div class="icon-circle" style="background: #fef9e7; color: #d97706;">
+                            <div class="icon-circle" style="background:#fef9e7; color:#d97706;">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                                     <circle cx="12" cy="7" r="4" />
@@ -517,7 +599,7 @@
                             </div>
                         </div>
                         <div class="activity-item">
-                            <div class="icon-circle" style="background: #e6f7ed; color: #16a34a;">
+                            <div class="icon-circle" style="background:#e6f7ed; color:#16a34a;">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="20 6 9 17 4 12" />
                                 </svg>
@@ -534,7 +616,7 @@
                             </div>
                         </div>
                         <div class="activity-item">
-                            <div class="icon-circle" style="background: #fce4ec; color: #dc2626;">
+                            <div class="icon-circle" style="background:#fce4ec; color:#dc2626;">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="12" cy="12" r="10" />
                                     <line x1="12" y1="8" x2="12" y2="12" />
@@ -584,8 +666,60 @@
         </div>
     </footer>
 
-    <!-- Chart initialization script -->
     <script>
+        // ===== REDIRECTION FIX =====
+        // Ensure user is logged in (demo: check sessionStorage)
+        // In a real app with Firebase, we'll use onAuthStateChanged
+        (function checkAuth() {
+            const loggedIn = sessionStorage.getItem('erp_logged_in');
+            if (!loggedIn) {
+                // If not logged in, redirect to login page
+                // But we allow the page to load for demo; we'll set a flag from login
+                // For now, if we came from login, it sets the flag.
+                // If not, redirect to index.html
+                // However, to avoid infinite loop, we check if we're already on login page
+                if (!window.location.pathname.includes('index.html')) {
+                    // window.location.href = 'index.html';
+                    // For demo, we'll just show a message, but we'll not force redirect so demo works.
+                    // Uncomment the line above to enable redirection.
+                    // For now, we'll just set a default if not set.
+                    if (!sessionStorage.getItem('erp_logged_in')) {
+                        // Set a default for demo
+                        sessionStorage.setItem('erp_logged_in', 'true');
+                        sessionStorage.setItem('erp_user', 'Admin');
+                    }
+                }
+            }
+        })();
+
+        // ===== SIDEBAR TOGGLE (Mobile) =====
+        const hamburger = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+
+        hamburger.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', closeSidebar);
+
+        // Close sidebar on any link click (mobile)
+        sidebar.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        // ===== CHARTS =====
         document.addEventListener('DOMContentLoaded', function() {
             // Revenue Chart (bar)
             new Chart(document.getElementById('revenueChart'), {

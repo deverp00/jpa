@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ERP · Reports & Analytics</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/root.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+        .dashboard-main {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 24px 12px;
+            min-height: calc(100vh - 70px - 80px);
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px - 80px);
+            overflow-y: auto;
+            flex-shrink: 0;
+            border-right: var(--border);
+        }
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--border-radius);
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .sidebar a:hover {
+            background: #1e314a;
+            color: white;
+        }
+        .sidebar a.active {
+            background: #1e3a5f;
+            color: white;
+            border-left: 3px solid var(--primary);
+        }
+        .sidebar a svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            fill: currentColor;
+        }
+        .sidebar .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid #1e314a;
+            padding-top: 16px;
+            margin-top: 24px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 24px 32px;
+            overflow-x: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .page-header h1 span {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-left: 8px;
+        }
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            border: var(--border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.15s;
+        }
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        .btn-success:hover {
+            background: #16a34a;
+        }
+
+        .filters-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+        }
+        .filters-bar select {
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            border: var(--border);
+            background: var(--light-bg);
+            font-size: 13px;
+            color: var(--text-main);
+            min-width: 140px;
+        }
+        .filters-bar select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 1024px) {
+            .report-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+            padding: 20px 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .card-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-header h3 svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--primary);
+        }
+        .card-header .actions {
+            display: flex;
+            gap: 8px;
+        }
+        .card-header .actions .btn-sm {
+            padding: 4px 10px;
+            font-size: 12px;
+            border: var(--border);
+            border-radius: var(--border-radius);
+            background: var(--light-bg);
+            cursor: pointer;
+        }
+        .card-header .actions .btn-sm:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .chart-container {
+            height: 180px;
+            position: relative;
+        }
+
+        .report-stats {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .report-stats .stat {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .report-stats .stat strong {
+            color: var(--text-main);
+        }
+
+        .builder-section {
+            margin-top: 24px;
+            padding: 20px;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+        }
+        .builder-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .builder-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+        }
+        .builder-row .form-group {
+            flex: 1;
+            min-width: 140px;
+        }
+        .builder-row .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .builder-row .form-group select,
+        .builder-row .form-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: var(--border);
+            border-radius: var(--border-radius);
+            background: var(--card-bg);
+            font-size: 13px;
+        }
+
+        .scheduled-reports {
+            margin-top: 24px;
+        }
+        .scheduled-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .scheduled-item:last-child {
+            border-bottom: none;
+        }
+        .scheduled-item .info {
+            font-size: 14px;
+        }
+        .scheduled-item .info .name {
+            font-weight: 500;
+        }
+        .scheduled-item .info .detail {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+        .scheduled-item .toggle {
+            width: 40px;
+            height: 22px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: 0.2s;
+        }
+        .scheduled-item .toggle.active {
+            background: var(--success);
+        }
+        .scheduled-item .toggle .knob {
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .scheduled-item .toggle.active .knob {
+            left: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                padding: 16px 8px;
+            }
+            .sidebar a span { display: none; }
+            .sidebar a { justify-content: center; padding: 12px; }
+            .sidebar a svg { width: 22px; height: 22px; }
+            .content { padding: 16px; }
+            .filters-bar { flex-direction: column; }
+            .builder-row { flex-direction: column; }
+            .builder-row .form-group { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-left">
+            <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            <span class="logo-text">ERP·Nexus</span>
+        </div>
+        <div class="header-center">
+            <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" placeholder="Search reports..." />
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="notif-bell">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <span class="badge">3</span>
+            </div>
+            <div class="user-avatar">JD</div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav>
+                <a href="dashboard.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="students.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <span>Students 360°</span>
+                </a>
+                <a href="teachers.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                    <span>Teachers 360°</span>
+                </a>
+                <a href="fees.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    <span>Fees</span>
+                </a>
+                <a href="admissions.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                    </svg>
+                    <span>Admissions</span>
+                </a>
+                <a href="payroll.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    <span>Payroll</span>
+                </a>
+                <a href="#" class="active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
+                        <circle cx="12" cy="16" r="5" />
+                        <path d="M12 11v5" />
+                        <path d="M9 13l3 3 3-3" />
+                    </svg>
+                    <span>Reports</span>
+                </a>
+                <div class="sidebar-bottom">
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l2.5 2.5a1.65 1.65 0 0 0 1.18.5h6.44a1.65 1.65 0 0 0 1.18-.5l2.5-2.5z" />
+                        </svg>
+                        <span>Settings</span>
+                    </a>
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Content -->
+        <section class="content">
+            <div class="page-header">
+                <h1>Reports & Analytics <span>· insights & decision support</span></h1>
+                <div class="header-actions">
+                    <button class="btn btn-success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                            <polyline points="17 6 23 6 23 12" />
+                        </svg>
+                        Export PDF
+                    </button>
+                    <button class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                        Export Excel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-bar">
+                <select>
+                    <option>Academic Year: 2026-27</option>
+                    <option>2025-26</option>
+                    <option>2024-25</option>
+                </select>
+                <select>
+                    <option>All Classes</option>
+                    <option>Class 8</option>
+                    <option>Class 9</option>
+                    <option>Class 10</option>
+                </select>
+                <select>
+                    <option>Date Range: This Month</option>
+                    <option>Last 7 Days</option>
+                    <option>Last 30 Days</option>
+                    <option>Custom Range</option>
+                </select>
+            </div>
+
+            <!-- Report Grid -->
+            <div class="report-grid">
+                <!-- Attendance Trend -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                                <polyline points="17 6 23 6 23 12" />
+                            </svg>
+                            Attendance Trend
+                        </h3>
+                        <div class="actions">
+                            <button class="btn-sm">View</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="attendanceReportChart"></canvas>
+                    </div>
+                    <div class="report-stats">
+                        <span class="stat"><strong>94%</strong> this month</span>
+                        <span class="stat"><strong>+2.1%</strong> vs last month</span>
+                        <span class="stat"><strong>189</strong> total days</span>
+                    </div>
+                </div>
+
+                <!-- Collection Trend -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                            </svg>
+                            Collection Trend
+                        </h3>
+                        <div class="actions">
+                            <button class="btn-sm">View</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="collectionReportChart"></canvas>
+                    </div>
+                    <div class="report-stats">
+                        <span class="stat"><strong>₹21.6L</strong> collected</span>
+                        <span class="stat"><strong>76%</strong> collection rate</span>
+                        <span class="stat"><strong>142</strong> transactions</span>
+                    </div>
+                </div>
+
+                <!-- Defaulters Age -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                            Defaulters Age Analysis
+                        </h3>
+                        <div class="actions">
+                            <button class="btn-sm">View</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="defaultersChart"></canvas>
+                    </div>
+                    <div class="report-stats">
+                        <span class="stat"><strong>28</strong> defaulters</span>
+                        <span class="stat"><strong>₹2.8L</strong> overdue</span>
+                        <span class="stat"><strong>45</strong> avg. days overdue</span>
+                    </div>
+                </div>
+
+                <!-- Exam Performance -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                            </svg>
+                            Exam Performance
+                        </h3>
+                        <div class="actions">
+                            <button class="btn-sm">View</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="examPerformanceChart"></canvas>
+                    </div>
+                    <div class="report-stats">
+                        <span class="stat"><strong>78.4%</strong> pass rate</span>
+                        <span class="stat"><strong>68</strong> students</span>
+                        <span class="stat"><strong>4</strong> subjects</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Staff Attendance Report (full width) -->
+            <div class="card" style="margin-bottom:24px;">
+                <div class="card-header">
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                        </svg>
+                        Staff Attendance (This Month)
+                    </h3>
+                    <div class="actions">
+                        <button class="btn-sm">Export</button>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:12px;">
+                    <div style="padding:8px;background:var(--light-bg);border-radius:var(--border-radius);text-align:center;">
+                        <div style="font-size:12px;color:var(--text-muted);">Present</div>
+                        <div style="font-size:20px;font-weight:700;color:var(--success);">54</div>
+                    </div>
+                    <div style="padding:8px;background:var(--light-bg);border-radius:var(--border-radius);text-align:center;">
+                        <div style="font-size:12px;color:var(--text-muted);">Absent</div>
+                        <div style="font-size:20px;font-weight:700;color:var(--danger);">6</div>
+                    </div>
+                    <div style="padding:8px;background:var(--light-bg);border-radius:var(--border-radius);text-align:center;">
+                        <div style="font-size:12px;color:var(--text-muted);">On Leave</div>
+                        <div style="font-size:20px;font-weight:700;color:var(--warning);">8</div>
+                    </div>
+                </div>
+                <div style="height:60px;position:relative;">
+                    <canvas id="staffReportChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Custom Report Builder -->
+            <div class="builder-section">
+                <h3>Custom Report Builder</h3>
+                <div class="builder-row">
+                    <div class="form-group">
+                        <label>Report Type</label>
+                        <select>
+                            <option>Student Report</option>
+                            <option>Fee Report</option>
+                            <option>Attendance Report</option>
+                            <option>Staff Report</option>
+                            <option>Academic Report</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Class</label>
+                        <select>
+                            <option>All</option>
+                            <option>Class 8</option>
+                            <option>Class 9</option>
+                            <option>Class 10</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date Range</label>
+                        <select>
+                            <option>This Month</option>
+                            <option>Last 7 Days</option>
+                            <option>Last 30 Days</option>
+                            <option>Custom</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Format</label>
+                        <select>
+                            <option>PDF</option>
+                            <option>Excel</option>
+                            <option>CSV</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary">Generate Report</button>
+                </div>
+            </div>
+
+            <!-- Scheduled Reports -->
+            <div class="scheduled-reports">
+                <div class="card-header" style="margin-bottom:12px;">
+                    <h3>Scheduled Reports</h3>
+                    <button class="btn btn-sm" style="font-size:13px;padding:4px 12px;">+ Add Schedule</button>
+                </div>
+                <div class="scheduled-item">
+                    <div class="info">
+                        <div class="name">Monthly Collection Summary</div>
+                        <div class="detail">Every 1st · PDF · sent to principal@erp.com</div>
+                    </div>
+                    <div class="toggle active" onclick="this.classList.toggle('active')">
+                        <div class="knob"></div>
+                    </div>
+                </div>
+                <div class="scheduled-item">
+                    <div class="info">
+                        <div class="name">Attendance Weekly Report</div>
+                        <div class="detail">Every Friday · Excel · sent to hod@erp.com</div>
+                    </div>
+                    <div class="toggle active" onclick="this.classList.toggle('active')">
+                        <div class="knob"></div>
+                    </div>
+                </div>
+                <div class="scheduled-item">
+                    <div class="info">
+                        <div class="name">Defaulters Alert</div>
+                        <div class="detail">Every Monday · PDF · sent to accounts@erp.com</div>
+                    </div>
+                    <div class="toggle" onclick="this.classList.toggle('active')">
+                        <div class="knob"></div>
+                    </div>
+                </div>
+                <div class="scheduled-item">
+                    <div class="info">
+                        <div class="name">Staff Payroll Summary</div>
+                        <div class="detail">Last day of month · Excel · sent to hr@erp.com</div>
+                    </div>
+                    <div class="toggle active" onclick="this.classList.toggle('active')">
+                        <div class="knob"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+        <p>&copy; 2026 ERP·Nexus — Reports & Analytics · data-driven insights</p>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Support</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Attendance Report Chart (line)
+            new Chart(document.getElementById('attendanceReportChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Attendance %',
+                        data: [92, 94, 91, 96],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.2,
+                        fill: true,
+                        pointBackgroundColor: '#3b82f6',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { min: 85, max: 100 }, x: { grid: { display: false } } }
+                }
+            });
+
+            // Collection Report Chart (bar)
+            new Chart(document.getElementById('collectionReportChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                    datasets: [{
+                        label: 'Collection (₹ Lakhs)',
+                        data: [3.2, 4.1, 3.8, 5.0, 4.6, 5.8],
+                        backgroundColor: 'rgba(34, 197, 94, 0.6)',
+                        borderColor: '#22c55e',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }
+                }
+            });
+
+            // Defaulters Chart (doughnut)
+            new Chart(document.getElementById('defaultersChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['0-15 days', '16-30 days', '31-60 days', '60+ days'],
+                    datasets: [{
+                        data: [12, 8, 5, 3],
+                        backgroundColor: ['#fbbf24', '#f59e0b', '#f97316', '#ef4444'],
+                        borderWidth: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } },
+                    cutout: '55%',
+                }
+            });
+
+            // Exam Performance Chart (bar)
+            new Chart(document.getElementById('examPerformanceChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Math', 'Science', 'English', 'History'],
+                    datasets: [{
+                        label: 'Average Marks (%)',
+                        data: [85, 72, 68, 90],
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444'],
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { min: 0, max: 100 }, x: { grid: { display: false } } }
+                }
+            });
+
+            // Staff Attendance Chart (pie - small)
+            new Chart(document.getElementById('staffReportChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Present', 'Absent', 'On Leave'],
+                    datasets: [{
+                        data: [54, 6, 8],
+                        backgroundColor: ['#22c55e', '#f87171', '#fbbf24'],
+                        borderWidth: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } },
+                }
+            });
+        });
+    </script>
+</body>
+</html>

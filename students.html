@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ERP · Students 360°</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/root.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+
+    <style>
+        /* ----- Page-specific styles ----- */
+        .dashboard-main {
+            display: flex;
+            flex: 1;
+        }
+
+        /* Sidebar (same as dashboard) */
+        .sidebar {
+            width: 240px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 24px 12px;
+            min-height: calc(100vh - 70px - 80px);
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px - 80px);
+            overflow-y: auto;
+            flex-shrink: 0;
+            border-right: var(--border);
+        }
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--border-radius);
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .sidebar a:hover {
+            background: #1e314a;
+            color: white;
+        }
+        .sidebar a.active {
+            background: #1e3a5f;
+            color: white;
+            border-left: 3px solid var(--primary);
+        }
+        .sidebar a svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            fill: currentColor;
+        }
+        .sidebar .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid #1e314a;
+            padding-top: 16px;
+            margin-top: 24px;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            padding: 24px 32px;
+            overflow-x: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .page-header h1 span {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-left: 8px;
+        }
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            border: var(--border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.15s;
+        }
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Filters bar */
+        .filters-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+        }
+        .filters-bar select,
+        .filters-bar input {
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            border: var(--border);
+            background: var(--light-bg);
+            font-size: 13px;
+            color: var(--text-main);
+            min-width: 140px;
+        }
+        .filters-bar select:focus,
+        .filters-bar input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .filters-bar .search-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+            padding: 0 12px;
+        }
+        .filters-bar .search-input svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--secondary);
+        }
+        .filters-bar .search-input input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 8px 0;
+            font-size: 13px;
+            width: 180px;
+        }
+
+        /* Student list + profile layout */
+        .students-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 24px;
+        }
+        @media (max-width: 1024px) {
+            .students-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Table */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+            overflow: hidden;
+        }
+        .table-scroll {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        table th {
+            text-align: left;
+            padding: 12px 16px;
+            background: var(--light-bg);
+            font-weight: 600;
+            color: var(--text-muted);
+            border-bottom: var(--border);
+            white-space: nowrap;
+        }
+        table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #edf2f7;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        table tr:hover td {
+            background: #f8fafc;
+        }
+        table tr:last-child td {
+            border-bottom: none;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            background: #e6f7ed;
+            color: #16a34a;
+        }
+        .status-badge.inactive {
+            background: #fce4ec;
+            color: #dc2626;
+        }
+        .status-badge.pending {
+            background: #fef9e7;
+            color: #d97706;
+        }
+
+        /* Profile panel */
+        .profile-panel {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+            padding: 0;
+            overflow: hidden;
+        }
+        .profile-header {
+            padding: 20px 24px;
+            background: var(--light-bg);
+            border-bottom: var(--border);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .profile-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .profile-name h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .profile-name p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .profile-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 0 24px;
+            border-bottom: var(--border);
+            background: var(--card-bg);
+        }
+        .profile-tabs button {
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .profile-tabs button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .profile-tabs button:hover {
+            color: var(--text-main);
+        }
+
+        .profile-content {
+            padding: 20px 24px;
+            min-height: 200px;
+        }
+        .tab-panel {
+            display: none;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+        .tab-panel .info-row {
+            display: flex;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .tab-panel .info-row .label {
+            width: 140px;
+            font-weight: 500;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+        .tab-panel .info-row .value {
+            color: var(--text-main);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            fill: var(--secondary);
+            opacity: 0.3;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                padding: 16px 8px;
+            }
+            .sidebar a span {
+                display: none;
+            }
+            .sidebar a {
+                justify-content: center;
+                padding: 12px;
+            }
+            .sidebar a svg {
+                width: 22px;
+                height: 22px;
+            }
+            .content {
+                padding: 16px;
+            }
+            .filters-bar {
+                flex-direction: column;
+            }
+            .filters-bar .search-input input {
+                width: 100%;
+            }
+            .profile-header {
+                flex-wrap: wrap;
+            }
+            .profile-tabs {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-left">
+            <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            <span class="logo-text">ERP·Nexus</span>
+        </div>
+        <div class="header-center">
+            <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" placeholder="Search students, teachers..." />
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="notif-bell">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <span class="badge">3</span>
+            </div>
+            <div class="user-avatar">JD</div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav>
+                <a href="dashboard.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <span>Students 360°</span>
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                    <span>Teachers 360°</span>
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    <span>Fees</span>
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                    </svg>
+                    <span>Admissions</span>
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    <span>Payroll</span>
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
+                        <circle cx="12" cy="16" r="5" />
+                        <path d="M12 11v5" />
+                        <path d="M9 13l3 3 3-3" />
+                    </svg>
+                    <span>Reports</span>
+                </a>
+                <div class="sidebar-bottom">
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l2.5 2.5a1.65 1.65 0 0 0 1.18.5h6.44a1.65 1.65 0 0 0 1.18-.5l2.5-2.5z" />
+                        </svg>
+                        <span>Settings</span>
+                    </a>
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Content -->
+        <section class="content">
+            <!-- Page header -->
+            <div class="page-header">
+                <h1>Students 360° <span>· manage all student records</span></h1>
+                <div class="header-actions">
+                    <button class="btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                            <polyline points="17 6 23 6 23 12" />
+                        </svg>
+                        Export
+                    </button>
+                    <button class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        Add Student
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-bar">
+                <select>
+                    <option>All Classes</option>
+                    <option>Class 8</option>
+                    <option>Class 9</option>
+                    <option>Class 10</option>
+                </select>
+                <select>
+                    <option>All Sections</option>
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                </select>
+                <select>
+                    <option>All Status</option>
+                    <option>Active</option>
+                    <option>Inactive</option>
+                    <option>Pending</option>
+                </select>
+                <select>
+                    <option>Fee Status</option>
+                    <option>Paid</option>
+                    <option>Pending</option>
+                    <option>Overdue</option>
+                </select>
+                <div class="search-input">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                    <input type="text" placeholder="Search by name or ID..." />
+                </div>
+            </div>
+
+            <!-- Students Layout -->
+            <div class="students-layout">
+                <!-- Table -->
+                <div class="table-container">
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Class</th>
+                                    <th>Section</th>
+                                    <th>Status</th>
+                                    <th>Fee</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentTableBody">
+                                <!-- Clicking a row updates the profile panel -->
+                                <tr data-id="STU-2026-001">
+                                    <td>STU-2026-001</td>
+                                    <td>Riya Sharma</td>
+                                    <td>10</td>
+                                    <td>A</td>
+                                    <td><span class="status-badge">Active</span></td>
+                                    <td><span style="color:var(--success);">Paid</span></td>
+                                </tr>
+                                <tr data-id="STU-2026-002">
+                                    <td>STU-2026-002</td>
+                                    <td>Aarav Verma</td>
+                                    <td>8</td>
+                                    <td>B</td>
+                                    <td><span class="status-badge">Active</span></td>
+                                    <td><span style="color:var(--danger);">Overdue</span></td>
+                                </tr>
+                                <tr data-id="STU-2026-003">
+                                    <td>STU-2026-003</td>
+                                    <td>Kunal Singh</td>
+                                    <td>9</td>
+                                    <td>A</td>
+                                    <td><span class="status-badge inactive">Inactive</span></td>
+                                    <td><span style="color:var(--warning);">Pending</span></td>
+                                </tr>
+                                <tr data-id="STU-2026-004">
+                                    <td>STU-2026-004</td>
+                                    <td>Priya Patel</td>
+                                    <td>10</td>
+                                    <td>C</td>
+                                    <td><span class="status-badge pending">Pending</span></td>
+                                    <td><span style="color:var(--text-muted);">N/A</span></td>
+                                </tr>
+                                <tr data-id="STU-2026-005">
+                                    <td>STU-2026-005</td>
+                                    <td>Rohit Gupta</td>
+                                    <td>8</td>
+                                    <td>A</td>
+                                    <td><span class="status-badge">Active</span></td>
+                                    <td><span style="color:var(--success);">Paid</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Profile Panel -->
+                <div class="profile-panel" id="profilePanel">
+                    <!-- Profile header -->
+                    <div class="profile-header">
+                        <div class="profile-avatar">RS</div>
+                        <div class="profile-name">
+                            <h3 id="profileName">Riya Sharma</h3>
+                            <p id="profileId">STU-2026-001 · Class 10-A</p>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="profile-tabs">
+                        <button class="active" data-tab="personal">Personal</button>
+                        <button data-tab="parents">Parents</button>
+                        <button data-tab="attendance">Attendance</button>
+                        <button data-tab="fees">Fees</button>
+                        <button data-tab="documents">Documents</button>
+                    </div>
+
+                    <!-- Tab content -->
+                    <div class="profile-content">
+                        <!-- Personal -->
+                        <div class="tab-panel active" id="tab-personal">
+                            <div class="info-row"><span class="label">Full Name</span><span class="value">Riya Sharma</span></div>
+                            <div class="info-row"><span class="label">Date of Birth</span><span class="value">15 May 2008</span></div>
+                            <div class="info-row"><span class="label">Gender</span><span class="value">Female</span></div>
+                            <div class="info-row"><span class="label">Class</span><span class="value">10</span></div>
+                            <div class="info-row"><span class="label">Section</span><span class="value">A</span></div>
+                            <div class="info-row"><span class="label">Admission Date</span><span class="value">01 Jun 2025</span></div>
+                            <div class="info-row"><span class="label">Status</span><span class="value"><span class="status-badge">Active</span></span></div>
+                        </div>
+
+                        <!-- Parents -->
+                        <div class="tab-panel" id="tab-parents">
+                            <div class="info-row"><span class="label">Father's Name</span><span class="value">Mr. Rajesh Sharma</span></div>
+                            <div class="info-row"><span class="label">Mother's Name</span><span class="value">Mrs. Sunita Sharma</span></div>
+                            <div class="info-row"><span class="label">Guardian</span><span class="value">Mr. Rajesh Sharma</span></div>
+                            <div class="info-row"><span class="label">Contact</span><span class="value">+91 98765 43210</span></div>
+                            <div class="info-row"><span class="label">Email</span><span class="value">rajesh.sharma@email.com</span></div>
+                            <div class="info-row"><span class="label">Address</span><span class="value">123, Green Park, New Delhi</span></div>
+                        </div>
+
+                        <!-- Attendance -->
+                        <div class="tab-panel" id="tab-attendance">
+                            <div class="info-row"><span class="label">This Month</span><span class="value">Present: 18 / 22 (81.8%)</span></div>
+                            <div class="info-row"><span class="label">Last Month</span><span class="value">Present: 20 / 24 (83.3%)</span></div>
+                            <div class="info-row"><span class="label">Overall (2025-26)</span><span class="value">Present: 142 / 180 (78.9%)</span></div>
+                            <div class="info-row"><span class="label">Last Absent</span><span class="value">02 Sep 2026</span></div>
+                            <div style="margin-top:12px;padding:12px;background:var(--light-bg);border-radius:var(--border-radius);">
+                                <span style="font-size:13px;color:var(--text-muted);">Attendance trend available in Reports</span>
+                            </div>
+                        </div>
+
+                        <!-- Fees -->
+                        <div class="tab-panel" id="tab-fees">
+                            <div class="info-row"><span class="label">Total Fee</span><span class="value">₹45,000</span></div>
+                            <div class="info-row"><span class="label">Paid</span><span class="value">₹45,000</span></div>
+                            <div class="info-row"><span class="label">Pending</span><span class="value">₹0</span></div>
+                            <div class="info-row"><span class="label">Due Date</span><span class="value">N/A</span></div>
+                            <div class="info-row"><span class="label">Status</span><span class="value"><span style="color:var(--success);">Fully Paid</span></span></div>
+                            <div style="margin-top:12px;">
+                                <button class="btn" style="font-size:13px;">View Ledger</button>
+                                <button class="btn" style="font-size:13px;">Print Receipt</button>
+                            </div>
+                        </div>
+
+                        <!-- Documents -->
+                        <div class="tab-panel" id="tab-documents">
+                            <div class="info-row"><span class="label">Birth Certificate</span><span class="value"><span class="status-badge">Verified</span></span></div>
+                            <div class="info-row"><span class="label">Marksheet (Class 9)</span><span class="value"><span class="status-badge">Verified</span></span></div>
+                            <div class="info-row"><span class="label">Transfer Certificate</span><span class="value"><span class="status-badge pending">Pending</span></span></div>
+                            <div class="info-row"><span class="label">Aadhaar</span><span class="value"><span class="status-badge">Verified</span></span></div>
+                            <div style="margin-top:12px;">
+                                <button class="btn" style="font-size:13px;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                        <polyline points="17 8 12 3 7 8" />
+                                        <line x1="12" y1="3" x2="12" y2="15" />
+                                    </svg>
+                                    Upload Document
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+        <p>&copy; 2026 ERP·Nexus — Students 360° · all records live</p>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Support</a>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.profile-tabs button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.profile-tabs button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const tab = this.dataset.tab;
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                document.getElementById('tab-' + tab).classList.add('active');
+            });
+        });
+
+        // Row click → update profile (demo)
+        document.querySelectorAll('#studentTableBody tr').forEach(row => {
+            row.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const name = this.querySelectorAll('td')[1].textContent;
+                const cls = this.querySelectorAll('td')[2].textContent;
+                const sec = this.querySelectorAll('td')[3].textContent;
+                const initials = name.split(' ').map(w => w[0]).join('').toUpperCase();
+
+                document.getElementById('profileName').textContent = name;
+                document.getElementById('profileId').textContent = id + ' · Class ' + cls + '-' + sec;
+                document.querySelector('.profile-avatar').textContent = initials;
+
+                // Highlight row
+                document.querySelectorAll('#studentTableBody tr').forEach(r => r.style.background = '');
+                this.style.background = '#f0f7ff';
+            });
+        });
+
+        // Highlight first row by default
+        document.querySelector('#studentTableBody tr')?.click();
+    </script>
+</body>
+</html>

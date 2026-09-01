@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ERP · Fees Management</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/root.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+        /* ----- Page-specific styles ----- */
+        .dashboard-main {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 24px 12px;
+            min-height: calc(100vh - 70px - 80px);
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px - 80px);
+            overflow-y: auto;
+            flex-shrink: 0;
+            border-right: var(--border);
+        }
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--border-radius);
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .sidebar a:hover {
+            background: #1e314a;
+            color: white;
+        }
+        .sidebar a.active {
+            background: #1e3a5f;
+            color: white;
+            border-left: 3px solid var(--primary);
+        }
+        .sidebar a svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            fill: currentColor;
+        }
+        .sidebar .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid #1e314a;
+            padding-top: 16px;
+            margin-top: 24px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 24px 32px;
+            overflow-x: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .page-header h1 span {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-left: 8px;
+        }
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            border: var(--border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.15s;
+        }
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        .btn-success:hover {
+            background: #16a34a;
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .filters-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+        }
+        .filters-bar select,
+        .filters-bar input {
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            border: var(--border);
+            background: var(--light-bg);
+            font-size: 13px;
+            color: var(--text-main);
+            min-width: 140px;
+        }
+        .filters-bar select:focus,
+        .filters-bar input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .filters-bar .search-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+            padding: 0 12px;
+        }
+        .filters-bar .search-input svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--secondary);
+        }
+        .filters-bar .search-input input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 8px 0;
+            font-size: 13px;
+            width: 180px;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .kpi-mini {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+            padding: 12px 16px;
+        }
+        .kpi-mini .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .kpi-mini .value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 4px 0 2px;
+        }
+        .kpi-mini .sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .kpi-mini .sub .up { color: var(--success); }
+        .kpi-mini .sub .down { color: var(--danger); }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 1024px) {
+            .two-col { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+            padding: 20px 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .card-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-header h3 svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--primary);
+        }
+        .card-header a {
+            font-size: 13px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .card-header a:hover { text-decoration: underline; }
+
+        .chart-container {
+            height: 180px;
+            position: relative;
+        }
+
+        .fee-table-wrap {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        table th {
+            text-align: left;
+            padding: 10px 12px;
+            background: var(--light-bg);
+            font-weight: 600;
+            color: var(--text-muted);
+            border-bottom: var(--border);
+            white-space: nowrap;
+        }
+        table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #edf2f7;
+        }
+        table tr:last-child td {
+            border-bottom: none;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-badge.paid { background: #e6f7ed; color: #16a34a; }
+        .status-badge.pending { background: #fef9e7; color: #d97706; }
+        .status-badge.overdue { background: #fce4ec; color: #dc2626; }
+
+        .receipt-area {
+            margin-top: 12px;
+            padding: 16px;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                padding: 16px 8px;
+            }
+            .sidebar a span { display: none; }
+            .sidebar a { justify-content: center; padding: 12px; }
+            .sidebar a svg { width: 22px; height: 22px; }
+            .content { padding: 16px; }
+            .filters-bar { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-left">
+            <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            <span class="logo-text">ERP·Nexus</span>
+        </div>
+        <div class="header-center">
+            <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" placeholder="Search students, teachers..." />
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="notif-bell">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <span class="badge">3</span>
+            </div>
+            <div class="user-avatar">JD</div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav>
+                <a href="dashboard.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="students.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <span>Students 360°</span>
+                </a>
+                <a href="teachers.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                    <span>Teachers 360°</span>
+                </a>
+                <a href="#" class="active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    <span>Fees</span>
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                    </svg>
+                    <span>Admissions</span>
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    <span>Payroll</span>
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
+                        <circle cx="12" cy="16" r="5" />
+                        <path d="M12 11v5" />
+                        <path d="M9 13l3 3 3-3" />
+                    </svg>
+                    <span>Reports</span>
+                </a>
+                <div class="sidebar-bottom">
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l2.5 2.5a1.65 1.65 0 0 0 1.18.5h6.44a1.65 1.65 0 0 0 1.18-.5l2.5-2.5z" />
+                        </svg>
+                        <span>Settings</span>
+                    </a>
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Content -->
+        <section class="content">
+            <div class="page-header">
+                <h1>Fees Management <span>· structure, collection, receipts</span></h1>
+                <div class="header-actions">
+                    <button class="btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                            <polyline points="17 6 23 6 23 12" />
+                        </svg>
+                        Export
+                    </button>
+                    <button class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        New Fee Structure
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI mini -->
+            <div class="kpi-row" id="feeKpis">
+                <div class="kpi-mini">
+                    <div class="label">Total Assigned</div>
+                    <div class="value">₹28.4L</div>
+                    <div class="sub">for 2026-27</div>
+                </div>
+                <div class="kpi-mini">
+                    <div class="label">Collected</div>
+                    <div class="value">₹21.6L</div>
+                    <div class="sub"><span class="up">↑ 12%</span> vs last month</div>
+                </div>
+                <div class="kpi-mini">
+                    <div class="label">Outstanding</div>
+                    <div class="value">₹6.8L</div>
+                    <div class="sub"><span class="down">↑ 3%</span> overdue</div>
+                </div>
+                <div class="kpi-mini">
+                    <div class="label">Today's Collection</div>
+                    <div class="value">₹1.2L</div>
+                    <div class="sub">13 transactions</div>
+                </div>
+            </div>
+
+            <!-- Two columns: Chart + Quick collect -->
+            <div class="two-col">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                                <polyline points="17 6 23 6 23 12" />
+                            </svg>
+                            Collection Trend (last 6 months)
+                        </h3>
+                        <a href="#">Full report</a>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="feeChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                            Quick Collect
+                        </h3>
+                    </div>
+                    <div style="margin-bottom:12px;">
+                        <select style="width:100%;padding:8px;border:var(--border);border-radius:var(--border-radius);">
+                            <option>Select Student</option>
+                            <option>Riya Sharma (STU-001)</option>
+                            <option>Aarav Verma (STU-002)</option>
+                            <option>Kunal Singh (STU-003)</option>
+                        </select>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <input type="number" placeholder="Amount" style="flex:1;padding:8px;border:var(--border);border-radius:var(--border-radius);" />
+                        <button class="btn btn-success">Collect</button>
+                    </div>
+                    <div style="margin-top:12px;font-size:13px;color:var(--text-muted);">
+                        <span>Outstanding: ₹4,500</span> · <span>Due: 15 Sep 2026</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fee ledger table -->
+            <div class="card" style="padding-bottom:8px;">
+                <div class="card-header">
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                        </svg>
+                        Fee Ledger
+                    </h3>
+                    <div style="display:flex;gap:8px;">
+                        <select style="padding:6px 10px;border:var(--border);border-radius:var(--border-radius);font-size:13px;">
+                            <option>All Classes</option>
+                            <option>Class 8</option>
+                            <option>Class 9</option>
+                            <option>Class 10</option>
+                        </select>
+                        <select style="padding:6px 10px;border:var(--border);border-radius:var(--border-radius);font-size:13px;">
+                            <option>All Status</option>
+                            <option>Paid</option>
+                            <option>Pending</option>
+                            <option>Overdue</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fee-table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Class</th>
+                                <th>Total Fee</th>
+                                <th>Paid</th>
+                                <th>Pending</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Riya Sharma</td>
+                                <td>10-A</td>
+                                <td>₹45,000</td>
+                                <td>₹45,000</td>
+                                <td>₹0</td>
+                                <td>—</td>
+                                <td><span class="status-badge paid">Paid</span></td>
+                                <td><button class="btn" style="font-size:12px;padding:4px 8px;">Receipt</button></td>
+                            </tr>
+                            <tr>
+                                <td>Aarav Verma</td>
+                                <td>8-B</td>
+                                <td>₹35,000</td>
+                                <td>₹30,000</td>
+                                <td>₹5,000</td>
+                                <td>10 Sep 2026</td>
+                                <td><span class="status-badge pending">Pending</span></td>
+                                <td><button class="btn" style="font-size:12px;padding:4px 8px;">Collect</button></td>
+                            </tr>
+                            <tr>
+                                <td>Kunal Singh</td>
+                                <td>9-A</td>
+                                <td>₹40,000</td>
+                                <td>₹32,000</td>
+                                <td>₹8,000</td>
+                                <td>25 Aug 2026</td>
+                                <td><span class="status-badge overdue">Overdue</span></td>
+                                <td><button class="btn" style="font-size:12px;padding:4px 8px;">Collect</button></td>
+                            </tr>
+                            <tr>
+                                <td>Priya Patel</td>
+                                <td>10-C</td>
+                                <td>₹45,000</td>
+                                <td>₹0</td>
+                                <td>₹45,000</td>
+                                <td>30 Sep 2026</td>
+                                <td><span class="status-badge pending">Pending</span></td>
+                                <td><button class="btn" style="font-size:12px;padding:4px 8px;">Collect</button></td>
+                            </tr>
+                            <tr>
+                                <td>Rohit Gupta</td>
+                                <td>8-A</td>
+                                <td>₹35,000</td>
+                                <td>₹35,000</td>
+                                <td>₹0</td>
+                                <td>—</td>
+                                <td><span class="status-badge paid">Paid</span></td>
+                                <td><button class="btn" style="font-size:12px;padding:4px 8px;">Receipt</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Receipt stub (demo) -->
+            <div class="receipt-area" style="margin-top:24px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                    <span style="font-weight:600;">Recent Receipt: #RCP-2026-0042</span>
+                    <span style="font-size:13px;color:var(--text-muted);">Riya Sharma · ₹45,000 · 01 Sep 2026</span>
+                    <button class="btn" style="font-size:13px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                        Print Receipt
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+        <p>&copy; 2026 ERP·Nexus — Fees Management · live collection data</p>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Support</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fee collection chart
+            new Chart(document.getElementById('feeChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                    datasets: [{
+                        label: 'Collection (₹ Lakhs)',
+                        data: [3.2, 4.1, 3.8, 5.0, 4.6, 5.8],
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

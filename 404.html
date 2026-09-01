@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ERP · Page Not Found</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/root.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+
+    <style>
+        /* ----- Page-specific styles ----- */
+        .error-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: var(--light-bg);
+        }
+
+        .error-container {
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .error-container .error-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            display: block;
+        }
+        .error-container .error-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--secondary);
+            opacity: 0.3;
+        }
+
+        .error-container h1 {
+            font-size: 72px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .error-container h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+
+        .error-container p {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: var(--border-radius);
+            border: var(--border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: 0.15s;
+        }
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        .btn:hover {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-left">
+            <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            <span class="logo-text">ERP·Nexus</span>
+        </div>
+        <div class="header-center"></div>
+        <div class="header-right"></div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="error-main">
+        <div class="error-container">
+            <!-- Error icon -->
+            <div class="error-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+            </div>
+
+            <h1>404</h1>
+            <h2>Page Not Found</h2>
+            <p>Sorry, the page you are looking for does not exist or has been moved.</p>
+
+            <div class="error-actions">
+                <a href="dashboard.html" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    Go to Dashboard
+                </a>
+                <a href="javascript:history.back()" class="btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                    Go Back
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+        <p>&copy; 2026 ERP·Nexus — Page not found</p>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Support</a>
+        </div>
+    </footer>
+</body>
+</html>

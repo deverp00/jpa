@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ERP · User Profile</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/root.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+
+    <style>
+        .dashboard-main {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 24px 12px;
+            min-height: calc(100vh - 70px - 80px);
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px - 80px);
+            overflow-y: auto;
+            flex-shrink: 0;
+            border-right: var(--border);
+        }
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--border-radius);
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .sidebar a:hover {
+            background: #1e314a;
+            color: white;
+        }
+        .sidebar a.active {
+            background: #1e3a5f;
+            color: white;
+            border-left: 3px solid var(--primary);
+        }
+        .sidebar a svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            fill: currentColor;
+        }
+        .sidebar .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid #1e314a;
+            padding-top: 16px;
+            margin-top: 24px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 24px 32px;
+            overflow-x: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .page-header h1 span {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-left: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            border: var(--border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.15s;
+        }
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        .btn-success:hover {
+            background: #16a34a;
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 24px;
+        }
+        @media (max-width: 1024px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+            padding: 20px 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: var(--border);
+        }
+        .card-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-header h3 svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--primary);
+        }
+
+        .profile-avatar-large {
+            text-align: center;
+            padding: 12px 0;
+        }
+        .profile-avatar-large .avatar-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+            margin: 0 auto 12px;
+            border: var(--border);
+        }
+        .profile-avatar-large h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .profile-avatar-large .role {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        .profile-avatar-large .email {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .completeness-bar {
+            margin-top: 16px;
+            padding: 12px;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+        }
+        .completeness-bar .bar-bg {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 4px 0;
+        }
+        .completeness-bar .bar-fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 4px;
+            width: 85%;
+        }
+        .completeness-bar .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: var(--border);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            background: var(--card-bg);
+            color: var(--text-main);
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 10px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        .activity-item .icon-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #eef2ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .activity-item .icon-circle svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--primary);
+        }
+        .activity-item .content {
+            flex: 1;
+            padding: 0;
+        }
+        .activity-item .content .desc {
+            font-size: 14px;
+            color: var(--text-main);
+        }
+        .activity-item .content .meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .toggle-row:last-child {
+            border-bottom: none;
+        }
+        .toggle-row .label {
+            font-size: 14px;
+        }
+        .toggle-row .label .desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        .toggle {
+            width: 44px;
+            height: 24px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .toggle.active {
+            background: var(--success);
+        }
+        .toggle .knob {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .toggle.active .knob {
+            left: 22px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                padding: 16px 8px;
+            }
+            .sidebar a span { display: none; }
+            .sidebar a { justify-content: center; padding: 12px; }
+            .sidebar a svg { width: 22px; height: 22px; }
+            .content { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-left">
+            <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            <span class="logo-text">ERP·Nexus</span>
+        </div>
+        <div class="header-center">
+            <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" placeholder="Search..." />
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="notif-bell">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <span class="badge">3</span>
+            </div>
+            <div class="user-avatar">JD</div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav>
+                <a href="dashboard.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="students.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <span>Students 360°</span>
+                </a>
+                <a href="teachers.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                    <span>Teachers 360°</span>
+                </a>
+                <a href="fees.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    <span>Fees</span>
+                </a>
+                <a href="admissions.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                    </svg>
+                    <span>Admissions</span>
+                </a>
+                <a href="payroll.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    <span>Payroll</span>
+                </a>
+                <a href="reports.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
+                        <circle cx="12" cy="16" r="5" />
+                        <path d="M12 11v5" />
+                        <path d="M9 13l3 3 3-3" />
+                    </svg>
+                    <span>Reports</span>
+                </a>
+                <div class="sidebar-bottom">
+                    <a href="settings.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l2.5 2.5a1.65 1.65 0 0 0 1.18.5h6.44a1.65 1.65 0 0 0 1.18-.5l2.5-2.5z" />
+                        </svg>
+                        <span>Settings</span>
+                    </a>
+                    <a href="#" class="active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Content -->
+        <section class="content">
+            <div class="page-header">
+                <h1>User Profile <span>· manage your account</span></h1>
+                <button class="btn btn-primary" onclick="alert('Profile updated! (Demo)')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Save Profile
+                </button>
+            </div>
+
+            <div class="profile-grid">
+                <!-- Left Column: Avatar + Quick Info + Completeness -->
+                <div>
+                    <div class="card">
+                        <div class="profile-avatar-large">
+                            <div class="avatar-circle">JD</div>
+                            <h2>John Doe</h2>
+                            <div class="role">Administrator · Principal</div>
+                            <div class="email">john.doe@erpnexus.com</div>
+                            <div style="margin-top:8px;">
+                                <span class="status-badge" style="display:inline-block;padding:2px 14px;border-radius:12px;font-size:12px;font-weight:500;background:#e6f7ed;color:#16a34a;">Active</span>
+                            </div>
+                        </div>
+
+                        <div class="completeness-bar">
+                            <div class="label">
+                                <span>Profile Completeness</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="bar-bg">
+                                <div class="bar-fill" style="width:85%;"></div>
+                            </div>
+                            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">
+                                Complete your profile: Upload photo, add bio, verify email
+                            </div>
+                        </div>
+
+                        <div style="margin-top:12px;padding-top:12px;border-top:var(--border);">
+                            <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:14px;">
+                                <span style="color:var(--text-muted);">Member since</span>
+                                <span>01 Jun 2025</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:14px;">
+                                <span style="color:var(--text-muted);">Last login</span>
+                                <span>Today, 09:42 AM</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:14px;">
+                                <span style="color:var(--text-muted);">Role</span>
+                                <span><strong>Admin</strong></span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:14px;">
+                                <span style="color:var(--text-muted);">Department</span>
+                                <span>Administration</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+                            <button class="btn" style="font-size:13px;padding:6px 14px;" onclick="alert('Photo upload dialog (Demo)')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="17 8 12 3 7 8" />
+                                    <line x1="12" y1="3" x2="12" y2="15" />
+                                </svg>
+                                Upload Photo
+                            </button>
+                            <button class="btn" style="font-size:13px;padding:6px 14px;" onclick="alert('Profile verification (Demo)')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Verify Identity
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Tabs -->
+                <div>
+                    <!-- Tabs -->
+                    <div style="display:flex;gap:4px;border-bottom:var(--border);margin-bottom:16px;">
+                        <button class="tab-btn active" data-tab="edit" style="padding:10px 20px;background:none;border:none;border-bottom:2px solid var(--primary);font-weight:600;color:var(--primary);cursor:pointer;font-size:14px;">Edit Profile</button>
+                        <button class="tab-btn" data-tab="activity" style="padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;font-weight:500;color:var(--text-muted);cursor:pointer;font-size:14px;">Activity Log</button>
+                        <button class="tab-btn" data-tab="preferences" style="padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;font-weight:500;color:var(--text-muted);cursor:pointer;font-size:14px;">Preferences</button>
+                    </div>
+
+                    <!-- Edit Profile Tab -->
+                    <div class="tab-panel active" id="tab-edit">
+                        <div class="card" style="padding-bottom:16px;">
+                            <div class="card-header">
+                                <h3>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                    Personal Information
+                                </h3>
+                            </div>
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>First Name</label>
+                                        <input type="text" value="John" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Last Name</label>
+                                        <input type="text" value="Doe" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" value="john.doe@erpnexus.com" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <input type="tel" value="+91 98765 43210" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Department</label>
+                                    <select>
+                                        <option selected>Administration</option>
+                                        <option>Academics</option>
+                                        <option>Finance</option>
+                                        <option>Human Resources</option>
+                                        <option>IT</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Bio / About</label>
+                                    <textarea rows="2">Experienced education administrator with 15+ years in school management. Passionate about technology-driven learning.</textarea>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card" style="margin-top:16px;padding-bottom:16px;">
+                            <div class="card-header">
+                                <h3>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                    </svg>
+                                    Change Password
+                                </h3>
+                            </div>
+                            <div class="form-group">
+                                <label>Current Password</label>
+                                <input type="password" placeholder="••••••••" />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>New Password</label>
+                                    <input type="password" placeholder="••••••••" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Confirm New Password</label>
+                                    <input type="password" placeholder="••••••••" />
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" style="font-size:13px;" onclick="alert('Password changed! (Demo)')">Update Password</button>
+                        </div>
+                    </div>
+
+                    <!-- Activity Log Tab -->
+                    <div class="tab-panel" id="tab-activity" style="display:none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                                        <polyline points="17 6 23 6 23 12" />
+                                    </svg>
+                                    Recent Activity
+                                </h3>
+                                <span style="font-size:13px;color:var(--text-muted);">Last 30 days</span>
+                            </div>
+                            <div style="max-height:400px;overflow-y:auto;">
+                                <div class="activity-item">
+                                    <div class="icon-circle" style="background:#e6f7ed;color:#16a34a;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                    </div>
+                                    <div class="content">
+                                        <div class="desc">Approved admission application <strong>APP-2026-042</strong></div>
+                                        <div class="meta">Today, 10:15 AM · Neha Singh</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="icon-circle" style="background:#fef9e7;color:#d97706;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <polyline points="12 6 12 12 16 14" />
+                                        </svg>
+                                    </div>
+                                    <div class="content">
+                                        <div class="desc">Logged in from new device</div>
+                                        <div class="meta">Today, 09:42 AM · Chrome on Windows</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="icon-circle">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                                        </svg>
+                                    </div>
+                                    <div class="content">
+                                        <div class="desc">Processed payroll for August 2026</div>
+                                        <div class="meta">Yesterday, 4:30 PM · 68 employees</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="icon-circle" style="background:#fce4ec;color:#dc2626;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <line x1="12" y1="8" x2="12" y2="12" />
+                                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                                        </svg>
+                                    </div>
+                                    <div class="content">
+                                        <div class="desc">Rejected admission application <strong>APP-2026-038</strong></div>
+                                        <div class="meta">Yesterday, 2:10 PM · Documents incomplete</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="icon-circle" style="background:#e0f2fe;color:#2563eb;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <polyline points="17 8 12 3 7 8" />
+                                            <line x1="12" y1="3" x2="12" y2="15" />
+                                        </svg>
+                                    </div>
+                                    <div class="content">
+                                        <div class="desc">Uploaded document: <strong>Riya Sharma - Marksheet</strong></div>
+                                        <div class="meta">2 days ago · 11:20 AM</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="icon-circle" style="background:#f3e8ff;color:#9333ea;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                                        </svg>
+                                    </div>
+                                    <div class="content">
+                                        <div class="desc">Updated teacher profile: <strong>Mr. Rajesh Gupta</strong></div>
+                                        <div class="meta">3 days ago · 9:45 AM</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top:12px;padding-top:12px;border-top:var(--border);">
+                                <button class="btn" style="font-size:13px;" onclick="alert('Full activity log (Demo)')">View All Activity</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preferences Tab -->
+                    <div class="tab-panel" id="tab-preferences" style="display:none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="3" />
+                                        <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l2.5 2.5a1.65 1.65 0 0 0 1.18.5h6.44a1.65 1.65 0 0 0 1.18-.5l2.5-2.5z" />
+                                    </svg>
+                                    Notification Preferences
+                                </h3>
+                            </div>
+                            <div class="toggle-row">
+                                <div class="label">Email Notifications <span class="desc">· all system emails</span></div>
+                                <div class="toggle active" onclick="this.classList.toggle('active')"><div class="knob"></div></div>
+                            </div>
+                            <div class="toggle-row">
+                                <div class="label">SMS Alerts <span class="desc">· critical updates via SMS</span></div>
+                                <div class="toggle" onclick="this.classList.toggle('active')"><div class="knob"></div></div>
+                            </div>
+                            <div class="toggle-row">
+                                <div class="label">Portal Notifications <span class="desc">· in-app notification center</span></div>
+                                <div class="toggle active" onclick="this.classList.toggle('active')"><div class="knob"></div></div>
+                            </div>
+                            <div class="toggle-row">
+                                <div class="label">Weekly Digest <span class="desc">· summary report every Monday</span></div>
+                                <div class="toggle active" onclick="this.classList.toggle('active')"><div class="knob"></div></div>
+                            </div>
+                        </div>
+
+                        <div class="card" style="margin-top:16px;">
+                            <div class="card-header">
+                                <h3>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                    Display Preferences
+                                </h3>
+                            </div>
+                            <div class="toggle-row">
+                                <div class="label">Dark Mode <span class="desc">· enable dark theme</span></div>
+                                <div class="toggle" onclick="this.classList.toggle('active')"><div class="knob"></div></div>
+                            </div>
+                            <div class="toggle-row">
+                                <div class="label">Compact View <span class="desc">· denser layout</span></div>
+                                <div class="toggle" onclick="this.classList.toggle('active')"><div class="knob"></div></div>
+                            </div>
+                            <div class="form-group" style="margin-top:12px;">
+                                <label>Language</label>
+                                <select>
+                                    <option selected>English</option>
+                                    <option>Hindi</option>
+                                    <option>Spanish</option>
+                                    <option>French</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Date Format</label>
+                                <select>
+                                    <option selected>DD-MM-YYYY</option>
+                                    <option>MM-DD-YYYY</option>
+                                    <option>YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="card" style="margin-top:16px;">
+                            <div class="card-header">
+                                <h3>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="8" x2="12" y2="12" />
+                                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                                    </svg>
+                                    Account Actions
+                                </h3>
+                            </div>
+                            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                                <button class="btn btn-danger" onclick="if(confirm('Are you sure you want to deactivate your account?')) alert('Account deactivated (Demo)');">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="8" x2="12" y2="12" />
+                                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                                    </svg>
+                                    Deactivate Account
+                                </button>
+                                <button class="btn" onclick="alert('Download data request sent (Demo)')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                        <polyline points="17 8 12 3 7 8" />
+                                        <line x1="12" y1="3" x2="12" y2="15" />
+                                    </svg>
+                                    Export Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+        <p>&copy; 2026 ERP·Nexus — User Profile · manage your account</p>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Support</a>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.style.borderBottom = '2px solid transparent';
+                    b.style.color = 'var(--text-muted)';
+                    b.style.fontWeight = '500';
+                });
+                this.style.borderBottom = '2px solid var(--primary)';
+                this.style.color = 'var(--primary)';
+                this.style.fontWeight = '600';
+
+                const tab = this.dataset.tab;
+                document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+                document.getElementById('tab-' + tab).style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

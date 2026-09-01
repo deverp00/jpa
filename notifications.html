@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ERP · Notifications</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/root.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+
+    <style>
+        .dashboard-main {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 24px 12px;
+            min-height: calc(100vh - 70px - 80px);
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px - 80px);
+            overflow-y: auto;
+            flex-shrink: 0;
+            border-right: var(--border);
+        }
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--border-radius);
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .sidebar a:hover {
+            background: #1e314a;
+            color: white;
+        }
+        .sidebar a.active {
+            background: #1e3a5f;
+            color: white;
+            border-left: 3px solid var(--primary);
+        }
+        .sidebar a svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            fill: currentColor;
+        }
+        .sidebar .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid #1e314a;
+            padding-top: 16px;
+            margin-top: 24px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 24px 32px;
+            overflow-x: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .page-header h1 span {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-left: 8px;
+        }
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            border: var(--border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.15s;
+        }
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        .btn-success:hover {
+            background: #16a34a;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .notif-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 12px 20px 0;
+            border-bottom: var(--border);
+            background: var(--card-bg);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+        .notif-tabs button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .notif-tabs button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .notif-tabs button:hover {
+            color: var(--text-main);
+        }
+        .notif-tabs button .count {
+            display: inline-block;
+            padding: 0 8px;
+            border-radius: 10px;
+            background: var(--light-bg);
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+        .notif-tabs button.active .count {
+            background: var(--primary);
+            color: white;
+        }
+
+        .notif-list {
+            padding: 8px 0;
+        }
+        .notif-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 20px;
+            border-bottom: 1px solid #edf2f7;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        .notif-item:hover {
+            background: #f8fafc;
+        }
+        .notif-item.unread {
+            background: #f0f7ff;
+        }
+        .notif-item.unread .notif-title {
+            font-weight: 600;
+        }
+        .notif-item:last-child {
+            border-bottom: none;
+        }
+        .notif-item .icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #eef2ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .notif-item .icon-circle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--primary);
+        }
+        .notif-item .content {
+            flex: 1;
+            padding: 0;
+        }
+        .notif-item .content .notif-title {
+            font-size: 14px;
+            color: var(--text-main);
+        }
+        .notif-item .content .notif-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .notif-item .content .notif-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .notif-item .notif-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .notif-item .notif-actions .btn-sm {
+            padding: 4px 10px;
+            font-size: 12px;
+            border: var(--border);
+            border-radius: var(--border-radius);
+            background: var(--light-bg);
+            cursor: pointer;
+        }
+        .notif-item .notif-actions .btn-sm:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .notif-item .notif-actions .btn-sm.done {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .notif-footer {
+            padding: 12px 20px 16px;
+            border-top: var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .notif-footer .info {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .notif-footer .info strong {
+            color: var(--text-main);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                padding: 16px 8px;
+            }
+            .sidebar a span { display: none; }
+            .sidebar a { justify-content: center; padding: 12px; }
+            .sidebar a svg { width: 22px; height: 22px; }
+            .content { padding: 16px; }
+            .notif-item {
+                flex-wrap: wrap;
+            }
+            .notif-item .notif-actions {
+                width: 100%;
+                padding-left: 54px;
+            }
+            .notif-tabs {
+                overflow-x: auto;
+            }
+            .notif-tabs button {
+                font-size: 13px;
+                padding: 8px 14px;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-left">
+            <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            <span class="logo-text">ERP·Nexus</span>
+        </div>
+        <div class="header-center">
+            <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" placeholder="Search notifications..." />
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="notif-bell">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <span class="badge">3</span>
+            </div>
+            <div class="user-avatar">JD</div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav>
+                <a href="dashboard.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="students.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <span>Students 360°</span>
+                </a>
+                <a href="teachers.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                    <span>Teachers 360°</span>
+                </a>
+                <a href="fees.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    <span>Fees</span>
+                </a>
+                <a href="admissions.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                    </svg>
+                    <span>Admissions</span>
+                </a>
+                <a href="payroll.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    <span>Payroll</span>
+                </a>
+                <a href="reports.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
+                        <circle cx="12" cy="16" r="5" />
+                        <path d="M12 11v5" />
+                        <path d="M9 13l3 3 3-3" />
+                    </svg>
+                    <span>Reports</span>
+                </a>
+                <div class="sidebar-bottom">
+                    <a href="settings.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l2.5 2.5a1.65 1.65 0 0 0 1.18.5h6.44a1.65 1.65 0 0 0 1.18-.5l2.5-2.5z" />
+                        </svg>
+                        <span>Settings</span>
+                    </a>
+                    <a href="profile.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" class="active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                        <span>Notifications</span>
+                    </a>
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Content -->
+        <section class="content">
+            <div class="page-header">
+                <h1>Notifications <span>· stay updated</span></h1>
+                <div class="header-actions">
+                    <button class="btn btn-success" onclick="alert('All notifications marked as read! (Demo)')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Mark All Read
+                    </button>
+                </div>
+            </div>
+
+            <!-- Notification Cards -->
+            <div class="card">
+                <!-- Tabs -->
+                <div class="notif-tabs">
+                    <button class="active" data-filter="all">
+                        All <span class="count">18</span>
+                    </button>
+                    <button data-filter="unread">
+                        Unread <span class="count">3</span>
+                    </button>
+                    <button data-filter="alerts">
+                        Alerts <span class="count">5</span>
+                    </button>
+                    <button data-filter="updates">
+                        Updates <span class="count">8</span>
+                    </button>
+                    <button data-filter="messages">
+                        Messages <span class="count">2</span>
+                    </button>
+                </div>
+
+                <!-- Notification List -->
+                <div class="notif-list" id="notifList">
+                    <!-- Unread: Fee alert -->
+                    <div class="notif-item unread" data-type="alerts">
+                        <div class="icon-circle" style="background:#fce4ec;color:#dc2626;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                        </div>
+                        <div class="content">
+                            <div class="notif-title">Fee Overdue Alert</div>
+                            <div class="notif-desc">Kunal Singh (Class 9-A) has overdue fee of ₹8,000. Payment was due on 25 Aug 2026.</div>
+                            <div class="notif-meta">2 hours ago · Fees Module</div>
+                        </div>
+                        <div class="notif-actions">
+                            <button class="btn-sm" onclick="event.stopPropagation();alert('Mark as read (Demo)')">Mark Read</button>
+                            <button class="btn-sm" onclick="event.stopPropagation();window.location.href='fees.html'">View</button>
+                        </div>
+                    </div>
+
+                    <!-- Unread: Admission approval -->
+                    <div class="notif-item unread" data-type="updates">
+                        <div class="icon-circle" style="background:#e6f7ed;color:#16a34a;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </div>
+                        <div class="content">
+                            <div class="notif-title">Admission Approved</div>
+                            <div class="notif-desc">Neha Singh's application (APP-2026-042) has been approved for Class 8. Student record has been generated.</div>
+                            <div class="notif-meta">3 hours ago · Admissions Module</div>
+                        </div>
+                        <div class="notif-actions">
+                            <button class="btn-sm" onclick="event.stopPropagation();alert('Mark as read (Demo)')">Mark Read</button>
+                            <button class="btn-sm" onclick="event.stopPropagation();window.location.href='students.html'">View Student</button>
+                        </div>
+                    </div>
+
+                    <!-- Unread: Document verification -->
+                    <div class="notif-item unread" data-type="alerts">
+                        <div class="icon-circle" style="background:#fef9e7;color:#d97706;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="17 8 12 3 7 8" />
+                                <line x1="12" y1="3" x2="12" y2="15" />
+                            </svg>
+                        </div>
+                        <div class="content">
+                            <div class="notif-title">Document Pending Verification</div>
+                            <div class="notif-desc">Riya Sharma's Transfer Certificate is pending verification. Uploaded 2 days ago.</div>
+                            <div class="notif-meta">5 hours ago · Documents</div>
+                        </div>
+                        <div class="notif-actions">
+                            <button class="btn-sm" onclick="event.stopPropagation();alert('Mark as read (Demo)')">Mark Read</button>
+                            <button class="btn-sm" onclick="event.stopPropagation();window.location.href='students.html'">Verify</button>
+                        </div>
+                    </div>
+
+                    <!-- Read: Payroll processed -->
+                    <div class="notif-item" data-type="updates">
+                        <div class="icon-circle" style="background:#e0f2fe;color:#2563eb;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                            </svg>
+                        </div>
+                        <div class="content">
+                            <div class="notif-title">Payroll Processed</div>
+                            <div class="notif-desc">August 2026 payroll has been processed. 68 employees processed. Total net: ₹12.8L.</div>
+                            <div class="notif-meta">Yesterday, 4:30 PM · Payroll Module</div>
+                        </div>
+                        <div class="notif-actions">
+                            <button class="btn-sm done" onclick="event.stopPropagation();">Read</button>
+                            <button class="btn-sm" onclick="event.stopPropagation();window.location.href='payroll.html'">View</button>
+                        </div>
+                    </div>
+
+                    <!-- Read: New admission application -->
+                    <div class="notif-item" data-type="messages">
+                        <div class="icon-circle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                            </svg>
+                        </div>
+                        <div class="content">
+                            <div class="notif-title">New Admission Application</div>
+                            <div class="notif-desc">Vikram Raj has submitted a new application (APP-2026-041) for Class 9. Please review.</div>
+                            <div class="notif-meta">Yesterday, 2:15 PM · Admissions Module</div>
+                        </div>
+                        <div class="notif-actions">
+                            <button class="btn-sm done" onclick="event.stopPropagation();">Read</button>
+                            <button class="btn-sm" onclick="event.stopPropagation();window.location.href='admissions.html'">Review</button>
+                        </div>
+                    </div>
+
+                    <!-- Read: Leave approved -->
+                    <div class="notif-item" data-type="alerts">
+                        <div class="icon-circle" style="background:#f3e8ff;color:#9333ea;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                            </svg>
+                        </div>
+                        <div class="content">
+                            <div class="notif-title">Leave Approved</div>
+                            <div class="notif-desc">Mr. Arjun Singh's leave request for 2 days (10-11 Sep) has been approved.</div>
+                            <div class="notif-meta">Yesterday, 11:30 AM · HR Module</div>
+                        </div>
+                        <div class="notif-actions">
+                            <button class="btn-sm done" onclick="event.stopPropagation();">Read</button>
+                            <button class="btn-sm" onclick="event.stopPropagation();window.location.href='teachers.html'">View Teacher</button>
+                        </div>
+                    </div>
+
+                    <!-- Read: Fee payment received -->
+                    <div class="notif-item" data-type="updates">
+                        <div class="icon-circle" style="background:#e6f7ed;color:#16a34a;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                        <div class="content">
+                            <div class="notif-title">Fee Payment Received</div>
+                            <div class="notif-desc">Rohit Gupta (Class 8-A) paid ₹35,000. Receipt #RCP-2026-0041 generated.</div>
+                            <div class="notif-meta">2 days ago · Fees Module</div>
+                        </div>
+                        <div class="notif-actions">
+                            <button class="btn-sm done" onclick="event.stopPropagation();">Read</button>
+                            <button class="btn-sm" onclick="event.stopPropagation();window.location.href='receipt.html'">View Receipt</button>
+                        </div>
+                    </div>
+
+                    <!-- Read: Exam results published -->
+                    <div class="notif-item" data-type="messages">
+                        <div class="icon-circle" style="background:#fef9e7;color:#d97706;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                            </svg>
+                        </div>
+                        <div class="content">
+                            <div class="notif-title">Exam Results Published</div>
+                            <div class="notif-desc">Mid-term exam results for Class 10 have been published. 68 students, 78.4% pass rate.</div>
+                            <div class="notif-meta">3 days ago · Academics</div>
+                        </div>
+                        <div class="notif-actions">
+                            <button class="btn-sm done" onclick="event.stopPropagation();">Read</button>
+                            <button class="btn-sm" onclick="event.stopPropagation();window.location.href='reports.html'">View Report</button>
+                        </div>
+                    </div>
+
+                    <!-- Read: System update -->
+                    <div class="notif-item" data-type="updates">
+                        <div class="icon-circle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3" />
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l2.5 2.5a1.65 1.65 0 0 0 1.18.5h6.44a1.65 1.65 0 0 0 1.18-.5l2.5-2.5z" />
+                            </svg>
+                        </div>
+                        <div class="content">
+                            <div class="notif-title">System Update Complete</div>
+                            <div class="notif-desc">Version 2.1.0 deployed. New features: Reports dashboard, improved search, dark mode.</div>
+                            <div class="notif-meta">5 days ago · System</div>
+                        </div>
+                        <div class="notif-actions">
+                            <button class="btn-sm done" onclick="event.stopPropagation();">Read</button>
+                            <button class="btn-sm" onclick="event.stopPropagation();window.location.href='settings.html'">Settings</button>
+                        </div>
+                    </div>
+
+                    <!-- Read: Birthday reminder -->
+                    <div class="notif-item" data-type="alerts">
+                        <div class="icon-circle" style="background:#fce4ec;color:#dc2626;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </div>
+                        <div class="content">
+                            <div class="notif-title">Student Birthday Reminder</div>
+                            <div class="notif-desc">Riya Sharma turns 18 tomorrow. Send birthday wishes!</div>
+                            <div class="notif-meta">6 days ago · Students Module</div>
+                        </div>
+                        <div class="notif-actions">
+                            <button class="btn-sm done" onclick="event.stopPropagation();">Read</button>
+                            <button class="btn-sm" onclick="event.stopPropagation();window.location.href='students.html'">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="notif-footer">
+                    <div class="info">
+                        Showing <strong>10</strong> of <strong>18</strong> notifications
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn" style="font-size:13px;padding:4px 14px;" onclick="alert('Load more notifications (Demo)')">Load More</button>
+                        <button class="btn" style="font-size:13px;padding:4px 14px;" onclick="alert('Archive all read notifications (Demo)')">Archive Read</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+        <p>&copy; 2026 ERP·Nexus — Notification Center · stay informed</p>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Support</a>
+        </div>
+    </footer>
+
+    <script>
+        // Tab filtering
+        document.querySelectorAll('.notif-tabs button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.notif-tabs button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const filter = this.dataset.filter;
+
+                document.querySelectorAll('.notif-item').forEach(item => {
+                    if (filter === 'all') {
+                        item.style.display = 'flex';
+                    } else if (filter === 'unread') {
+                        item.style.display = item.classList.contains('unread') ? 'flex' : 'none';
+                    } else {
+                        item.style.display = item.dataset.type === filter ? 'flex' : 'none';
+                    }
+                });
+
+                // Update count in tabs
+                document.querySelectorAll('.notif-tabs button').forEach(b => {
+                    const f = b.dataset.filter;
+                    let count = 0;
+                    document.querySelectorAll('.notif-item').forEach(item => {
+                        if (f === 'all') count++;
+                        else if (f === 'unread' && item.classList.contains('unread')) count++;
+                        else if (f === item.dataset.type) count++;
+                    });
+                    b.querySelector('.count').textContent = count;
+                });
+            });
+        });
+
+        // Click notification to view (expand or navigate)
+        document.querySelectorAll('.notif-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Prevent if clicking on buttons inside
+                if (e.target.closest('.btn-sm')) return;
+                // Mark as read
+                this.classList.remove('unread');
+                // Optional: expand or navigate
+                alert('Notification details (Demo)\n' + this.querySelector('.notif-title').textContent);
+            });
+        });
+    </script>
+</body>
+</html>

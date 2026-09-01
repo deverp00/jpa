@@ -1,0 +1,114 @@
+/* ========== HEADER ========== */
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 32px;
+    background: var(--card-bg);
+    border-bottom: var(--border);
+    border-radius: 0; /* no rounding at top */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.logo-icon {
+    font-size: 26px;
+    color: var(--primary);
+}
+.logo-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+}
+
+.header-center {
+    flex: 1;
+    max-width: 400px;
+    margin: 0 20px;
+}
+.search-box {
+    display: flex;
+    align-items: center;
+    background: var(--light-bg);
+    border-radius: var(--border-radius);
+    padding: 6px 16px;
+    border: var(--border);
+}
+.search-box i {
+    color: var(--secondary);
+    margin-right: 10px;
+}
+.search-box input {
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 8px 0;
+    font-size: 14px;
+    width: 100%;
+    color: var(--text-main);
+}
+.search-box input::placeholder {
+    color: var(--text-muted);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.notif-bell {
+    position: relative;
+    font-size: 20px;
+    color: var(--secondary);
+    cursor: pointer;
+}
+.notif-bell .badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--danger);
+    color: white;
+    font-size: 10px;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .app-header {
+        flex-wrap: wrap;
+        padding: 12px 16px;
+    }
+    .header-center {
+        order: 3;
+        flex: 1 0 100%;
+        margin: 8px 0 0;
+        max-width: 100%;
+    }
+    .header-right .notif-bell {
+        font-size: 18px;
+    }
+}

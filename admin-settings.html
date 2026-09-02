@@ -3,786 +3,633 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ERP · System Settings</title>
+    <title>Admin Settings – Janaki Professional Academy ERP</title>
 
     <!-- External CSS -->
     <link rel="stylesheet" href="css/root.css" />
     <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/settings.css" />
     <link rel="stylesheet" href="css/footer.css" />
-
-    <style>
-        .dashboard-main {
-            display: flex;
-            flex: 1;
-        }
-
-        .sidebar {
-            width: 240px;
-            background: var(--sidebar-bg);
-            color: var(--sidebar-text);
-            padding: 24px 12px;
-            min-height: calc(100vh - 70px - 80px);
-            position: sticky;
-            top: 70px;
-            height: calc(100vh - 70px - 80px);
-            overflow-y: auto;
-            flex-shrink: 0;
-            border-right: var(--border);
-        }
-        .sidebar nav {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            border-radius: var(--border-radius);
-            color: var(--sidebar-text);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            transition: background 0.2s;
-        }
-        .sidebar a:hover {
-            background: #1e314a;
-            color: white;
-        }
-        .sidebar a.active {
-            background: #1e3a5f;
-            color: white;
-            border-left: 3px solid var(--primary);
-        }
-        .sidebar a svg {
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-            fill: currentColor;
-        }
-        .sidebar .sidebar-bottom {
-            margin-top: auto;
-            border-top: 1px solid #1e314a;
-            padding-top: 16px;
-            margin-top: 24px;
-        }
-
-        .content {
-            flex: 1;
-            padding: 24px 32px;
-            overflow-x: auto;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .page-header h1 {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-        .page-header h1 span {
-            font-weight: 400;
-            color: var(--text-muted);
-            font-size: 16px;
-            margin-left: 8px;
-        }
-        .header-actions {
-            display: flex;
-            gap: 12px;
-        }
-        .btn {
-            padding: 8px 16px;
-            border-radius: var(--border-radius);
-            border: var(--border);
-            background: var(--card-bg);
-            color: var(--text-main);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.15s;
-        }
-        .btn svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-        .btn-success {
-            background: var(--success);
-            color: white;
-            border-color: var(--success);
-        }
-        .btn-success:hover {
-            background: #16a34a;
-        }
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-            border-color: var(--danger);
-        }
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-
-        .settings-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-        @media (max-width: 1024px) {
-            .settings-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            border: var(--border);
-            padding: 20px 24px;
-            box-shadow: var(--shadow-sm);
-        }
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: var(--border);
-        }
-        .card-header h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .card-header h3 svg {
-            width: 18px;
-            height: 18px;
-            fill: var(--primary);
-        }
-
-        .form-group {
-            margin-bottom: 14px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-main);
-            margin-bottom: 4px;
-        }
-        .form-group .help-text {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 8px 12px;
-            border: var(--border);
-            border-radius: var(--border-radius);
-            font-size: 14px;
-            background: var(--card-bg);
-            color: var(--text-main);
-        }
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-        .form-group textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
-
-        .toggle-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #edf2f7;
-        }
-        .toggle-row:last-child {
-            border-bottom: none;
-        }
-        .toggle-row .label {
-            font-size: 14px;
-        }
-        .toggle-row .label .desc {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-        .toggle {
-            width: 44px;
-            height: 24px;
-            background: #e2e8f0;
-            border-radius: 12px;
-            cursor: pointer;
-            position: relative;
-            transition: 0.2s;
-            flex-shrink: 0;
-        }
-        .toggle.active {
-            background: var(--success);
-        }
-        .toggle .knob {
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-        .toggle.active .knob {
-            left: 22px;
-        }
-
-        .id-preview {
-            display: inline-block;
-            padding: 4px 12px;
-            background: var(--light-bg);
-            border-radius: var(--border-radius);
-            font-family: monospace;
-            font-size: 14px;
-            color: var(--primary);
-            border: var(--border);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-            padding-top: 16px;
-            border-top: var(--border);
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 60px;
-                padding: 16px 8px;
-            }
-            .sidebar a span { display: none; }
-            .sidebar a { justify-content: center; padding: 12px; }
-            .sidebar a svg { width: 22px; height: 22px; }
-            .content { padding: 16px; }
-            .settings-grid { grid-template-columns: 1fr; }
-        }
-    </style>
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="app-header">
-        <div class="header-left">
-            <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="7" height="7" rx="1" />
-                <rect x="14" y="3" width="7" height="7" rx="1" />
-                <rect x="3" y="14" width="7" height="7" rx="1" />
-                <rect x="14" y="14" width="7" height="7" rx="1" />
-            </svg>
-            <span class="logo-text">ERP·Nexus</span>
-        </div>
-        <div class="header-center">
-            <div class="search-box">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-                <input type="text" placeholder="Search settings..." />
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="notif-bell">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                </svg>
-                <span class="badge">3</span>
-            </div>
-            <div class="user-avatar">JD</div>
-        </div>
-    </header>
 
-    <!-- MAIN -->
-    <main class="dashboard-main">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <nav>
-                <a href="dashboard.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="7" height="7" rx="1" />
-                        <rect x="14" y="3" width="7" height="7" rx="1" />
-                        <rect x="3" y="14" width="7" height="7" rx="1" />
-                        <rect x="14" y="14" width="7" height="7" rx="1" />
-                    </svg>
-                    <span>Dashboard</span>
-                </a>
-                <a href="students.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                    <span>Students 360°</span>
-                </a>
-                <a href="teachers.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                    </svg>
-                    <span>Teachers 360°</span>
-                </a>
-                <a href="fees.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                    </svg>
-                    <span>Fees</span>
-                </a>
-                <a href="admissions.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-                        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
-                    </svg>
-                    <span>Admissions</span>
-                </a>
-                <a href="payroll.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                    </svg>
-                    <span>Payroll</span>
-                </a>
-                <a href="reports.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
-                        <circle cx="12" cy="16" r="5" />
-                        <path d="M12 11v5" />
-                        <path d="M9 13l3 3 3-3" />
-                    </svg>
-                    <span>Reports</span>
-                </a>
-                <div class="sidebar-bottom">
-                    <a href="#" class="active">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="3" />
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l2.5 2.5a1.65 1.65 0 0 0 1.18.5h6.44a1.65 1.65 0 0 0 1.18-.5l2.5-2.5z" />
-                        </svg>
-                        <span>Settings</span>
+    <!-- ========== APP WRAPPER ========== -->
+    <div class="app-wrapper">
+
+        <!-- ========== HEADER ========== -->
+        <header class="app-header" id="appHeader">
+            <div class="header-inner">
+                <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+
+                <div class="header-brand">
+                    <a href="dashboard.html" class="brand-link">
+                        <span class="brand-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                                <path d="M2 17l10 5 10-5" />
+                                <path d="M2 12l10 5 10-5" />
+                            </svg>
+                        </span>
+                        <span class="brand-name">Janaki Professional Academy</span>
                     </a>
-                    <a href="#">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                </div>
+
+                <div class="header-session">
+                    <span class="session-label">Academic Session:</span>
+                    <span class="session-value" id="academicSession">2026-2027</span>
+                </div>
+
+                <div class="header-user">
+                    <div class="user-profile">
+                        <span class="user-avatar">A</span>
+                        <span class="user-name" id="userName">Admin</span>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn" aria-label="Logout">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                             <polyline points="16 17 21 12 16 7" />
                             <line x1="21" y1="12" x2="9" y2="12" />
                         </svg>
-                        <span>Logout</span>
-                    </a>
-                </div>
-            </nav>
-        </aside>
-
-        <!-- Content -->
-        <section class="content">
-            <div class="page-header">
-                <h1>System Settings <span>· configure your ERP instance</span></h1>
-                <div class="header-actions">
-                    <button class="btn btn-primary" onclick="alert('Settings saved! (Demo)')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        Save All Settings
+                        <span class="logout-text">Logout</span>
                     </button>
                 </div>
             </div>
+        </header>
 
-            <div class="settings-grid">
-                <!-- General Settings -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                            </svg>
-                            General Settings
-                        </h3>
+        <!-- ========== SIDEBAR + MAIN CONTENT ========== -->
+        <div class="app-body">
+
+            <!-- ========== SIDEBAR ========== -->
+            <nav class="sidebar" id="sidebar">
+                <div class="sidebar-inner">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="7" height="7" />
+                                        <rect x="14" y="3" width="7" height="7" />
+                                        <rect x="14" y="14" width="7" height="7" />
+                                        <rect x="3" y="14" width="7" height="7" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#students-sub" class="nav-link nav-toggle" data-target="students-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Students</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="students-sub">
+                                <li><a href="students.html">All Students</a></li>
+                                <li><a href="add-student.html">Add Student</a></li>
+                                <li><a href="student-admission.html">Admissions</a></li>
+                                <li><a href="student-promotion.html">Promotion</a></li>
+                                <li><a href="student-transfer.html">Transfer</a></li>
+                                <li><a href="student-id-card.html">ID Cards</a></li>
+                                <li><a href="student-documents.html">Documents</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#teachers-sub" class="nav-link nav-toggle" data-target="teachers-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 20v-6M8 20V8a4 4 0 0 1 8 0v12" />
+                                        <circle cx="12" cy="4" r="2" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Teachers & Staff</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="teachers-sub">
+                                <li><a href="teachers.html">All Teachers</a></li>
+                                <li><a href="add-teacher.html">Add Teacher</a></li>
+                                <li><a href="teacher-profile.html">Teacher Profile</a></li>
+                                <li><a href="staff.html">All Staff</a></li>
+                                <li><a href="staff-profile.html">Staff Profile</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#fees-sub" class="nav-link nav-toggle" data-target="fees-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="8" x2="12" y2="16" />
+                                        <line x1="8" y1="12" x2="16" y2="12" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Fee Management</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="fees-sub">
+                                <li><a href="fees.html">All Fees</a></li>
+                                <li><a href="fee-structure.html">Fee Structure</a></li>
+                                <li><a href="collect-fee.html">Collect Fee</a></li>
+                                <li><a href="fee-history.html">Fee History</a></li>
+                                <li><a href="fee-due.html">Fee Due</a></li>
+                                <li><a href="fee-receipt.html">Fee Receipt</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#salary-sub" class="nav-link nav-toggle" data-target="salary-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 2v4M12 22v-4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M22 12h-4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Salary Management</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="salary-sub">
+                                <li><a href="salary.html">All Salaries</a></li>
+                                <li><a href="salary-structure.html">Salary Structure</a></li>
+                                <li><a href="salary-payment.html">Make Payment</a></li>
+                                <li><a href="salary-history.html">Salary History</a></li>
+                                <li><a href="salary-slip.html">Salary Slip</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#attendance-sub" class="nav-link nav-toggle" data-target="attendance-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Attendance</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="attendance-sub">
+                                <li><a href="attendance.html">Dashboard</a></li>
+                                <li><a href="student-attendance.html">Student Attendance</a></li>
+                                <li><a href="staff-attendance.html">Staff Attendance</a></li>
+                                <li><a href="attendance-report.html">Attendance Report</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#academic-sub" class="nav-link nav-toggle" data-target="academic-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Academic</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="academic-sub">
+                                <li><a href="classes.html">Classes</a></li>
+                                <li><a href="sections.html">Sections</a></li>
+                                <li><a href="subjects.html">Subjects</a></li>
+                                <li><a href="academic-session.html">Academic Session</a></li>
+                                <li><a href="timetable.html">Timetable</a></li>
+                                <li><a href="examinations.html">Examinations</a></li>
+                                <li><a href="results.html">Results</a></li>
+                                <li><a href="report-card.html">Report Cards</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#comm-sub" class="nav-link nav-toggle" data-target="comm-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Communication</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="comm-sub">
+                                <li><a href="notices.html">Notices</a></li>
+                                <li><a href="events.html">Events</a></li>
+                                <li><a href="announcements.html">Announcements</a></li>
+                                <li><a href="calendar.html">Calendar</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#reports-sub" class="nav-link nav-toggle" data-target="reports-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
+                                        <path d="M3 18h18v-4H3z" />
+                                        <path d="M7 18v4" />
+                                        <path d="M17 18v4" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Reports</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="reports-sub">
+                                <li><a href="reports.html">All Reports</a></li>
+                                <li><a href="student-reports.html">Student Reports</a></li>
+                                <li><a href="fee-reports.html">Fee Reports</a></li>
+                                <li><a href="salary-reports.html">Salary Reports</a></li>
+                                <li><a href="attendance-reports.html">Attendance Reports</a></li>
+                                <li><a href="academic-reports.html">Academic Reports</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#docs-sub" class="nav-link nav-toggle" data-target="docs-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="16" y1="13" x2="8" y2="13" />
+                                        <line x1="16" y1="17" x2="8" y2="17" />
+                                        <polyline points="10 9 9 9 8 9" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Receipts & Docs</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="docs-sub">
+                                <li><a href="receipts.html">All Receipts</a></li>
+                                <li><a href="receipt-view.html">View Receipt</a></li>
+                                <li><a href="certificate.html">Certificates</a></li>
+                                <li><a href="document-generator.html">Document Generator</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item active nav-parent">
+                            <a href="#admin-sub" class="nav-link nav-toggle open" data-target="admin-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="3" />
+                                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Admin</span>
+                                <span class="nav-arrow open">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub open" id="admin-sub">
+                                <li><a href="users.html">Users</a></li>
+                                <li><a href="roles.html">Roles</a></li>
+                                <li><a href="permissions.html">Permissions</a></li>
+                                <li><a href="admin-settings.html" class="active">Admin Settings</a></li>
+                                <li><a href="profile.html">My Profile</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- ========== MAIN CONTENT ========== -->
+            <main class="main-content">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Admin Settings</h1>
+                    <div class="page-actions">
+                        <span class="page-date" id="currentDate">Loading...</span>
                     </div>
-                    <form id="generalSettings">
-                        <div class="form-group">
-                            <label>School / Institution Name</label>
-                            <input type="text" value="ERP·Nexus" />
-                        </div>
-                        <div class="form-group">
-                            <label>Tagline / Sub-head</label>
-                            <input type="text" value="Excellence in Education" />
-                        </div>
-                        <div class="form-group">
-                            <label>Address</label>
-                            <textarea rows="2">123, Education Street, New Delhi - 110001</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Contact Number</label>
-                            <input type="tel" value="+91 98765 43210" />
-                        </div>
-                        <div class="form-group">
-                            <label>Email Address</label>
-                            <input type="email" value="info@erpnexus.com" />
-                        </div>
-                        <div class="form-group">
-                            <label>Website</label>
-                            <input type="url" value="https://www.erpnexus.com" />
-                        </div>
-                        <div class="form-group">
-                            <label>Logo URL (optional)</label>
-                            <input type="url" placeholder="https://example.com/logo.png" />
-                            <div class="help-text">Paste a direct image URL or upload via media manager</div>
-                        </div>
-                    </form>
                 </div>
 
-                <!-- Receipt / Brand Settings -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9" />
-                            </svg>
-                            Receipt & Brand Settings
-                        </h3>
+                <!-- ========== SETTINGS WRAPPER ========== -->
+                <div class="settings-wrapper">
+
+                    <!-- ========== SETTINGS SIDEBAR ========== -->
+                    <aside class="settings-sidebar">
+                        <ul class="settings-nav">
+                            <li><a href="#general-settings" class="active">General</a></li>
+                            <li><a href="#institution-settings">Institution</a></li>
+                            <li><a href="#receipt-settings">Receipt</a></li>
+                            <li><a href="#id-card-settings">ID Card</a></li>
+                            <li><a href="#export-import-settings">Export/Import</a></li>
+                        </ul>
+                    </aside>
+
+                    <!-- ========== SETTINGS CONTENT ========== -->
+                    <div class="settings-content">
+
+                        <!-- ====== GENERAL SETTINGS ====== -->
+                        <section id="general-settings" class="settings-section">
+                            <div class="section-header">
+                                <h3 class="section-title">General Settings</h3>
+                            </div>
+                            <p class="section-desc">Configure basic system settings and preferences.</p>
+
+                            <form id="generalSettingsForm" class="settings-form">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="schoolName" class="form-label">School Name</label>
+                                        <input type="text" id="schoolName" class="form-input" placeholder="Janaki Professional Academy" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="schoolAddress" class="form-label">School Address</label>
+                                        <input type="text" id="schoolAddress" class="form-input" placeholder="Dikhlem, Dayangmukh West, Karbi Anglong, Assam – 782448" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="schoolPhone" class="form-label">Phone Number</label>
+                                        <input type="tel" id="schoolPhone" class="form-input" placeholder="7896579939" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="schoolEmail" class="form-label">Email Address</label>
+                                        <input type="email" id="schoolEmail" class="form-input" placeholder="janakipa@gmail.com" />
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label for="schoolWebsite" class="form-label">Website</label>
+                                        <input type="url" id="schoolWebsite" class="form-input" placeholder="https://www.janakipa.edu.in" />
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                                </div>
+                            </form>
+                        </section>
+
+                        <!-- ====== INSTITUTION SETTINGS ====== -->
+                        <section id="institution-settings" class="settings-section" style="display:none;">
+                            <div class="section-header">
+                                <h3 class="section-title">Institution Settings</h3>
+                            </div>
+                            <p class="section-desc">Configure principal and authorized personnel information.</p>
+
+                            <form id="institutionSettingsForm" class="settings-form">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="principalName" class="form-label">Principal Name</label>
+                                        <input type="text" id="principalName" class="form-input" placeholder="Principal Name" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="principalContact" class="form-label">Principal Contact</label>
+                                        <input type="tel" id="principalContact" class="form-input" placeholder="7896579939" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="principalEmail" class="form-label">Principal Email</label>
+                                        <input type="email" id="principalEmail" class="form-input" placeholder="principal@janakipa.edu.in" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="establishmentYear" class="form-label">Establishment Year</label>
+                                        <input type="number" id="establishmentYear" class="form-input" placeholder="2010" />
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label for="institutionDescription" class="form-label">Institution Description</label>
+                                        <textarea id="institutionDescription" class="form-input" rows="3" placeholder="Brief description of the institution"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                                </div>
+                            </form>
+                        </section>
+
+                        <!-- ====== RECEIPT SETTINGS ====== -->
+                        <section id="receipt-settings" class="settings-section" style="display:none;">
+                            <div class="section-header">
+                                <h3 class="section-title">Receipt Settings</h3>
+                            </div>
+                            <p class="section-desc">Configure receipt templates and default values.</p>
+
+                            <form id="receiptSettingsForm" class="settings-form">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="receiptTitle" class="form-label">Receipt Title</label>
+                                        <input type="text" id="receiptTitle" class="form-input" placeholder="Fee Receipt" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="receiptPrefix" class="form-label">Receipt Number Prefix</label>
+                                        <input type="text" id="receiptPrefix" class="form-input" placeholder="RCP" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="receiptFooter" class="form-label">Receipt Footer Text</label>
+                                        <input type="text" id="receiptFooter" class="form-input" placeholder="Thank you for your payment" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="signatureName" class="form-label">Authorized Signature Name</label>
+                                        <input type="text" id="signatureName" class="form-input" placeholder="Principal" />
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label for="receiptTerms" class="form-label">Terms & Conditions</label>
+                                        <textarea id="receiptTerms" class="form-input" rows="2" placeholder="Terms and conditions for the receipt"></textarea>
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label class="form-label">Receipt Preview</label>
+                                        <div style="border:1px solid var(--border-color);border-radius:var(--radius);padding:var(--spacing-md);background:var(--bg-light);">
+                                            <div id="receiptSettingsPreview">
+                                                <div style="text-align:center;border-bottom:2px solid var(--primary-color);padding-bottom:8px;margin-bottom:8px;">
+                                                    <div class="institution-name" style="font-weight:bold;font-size:18px;color:var(--primary-color);">Janaki Professional Academy</div>
+                                                    <div class="institution-address" style="font-size:12px;color:var(--text-muted);">Dikhlem, Dayangmukh West, Karbi Anglong, Assam – 782448</div>
+                                                </div>
+                                                <div style="text-align:center;font-weight:bold;font-size:16px;margin:8px 0;">Fee Receipt</div>
+                                                <div style="display:flex;justify-content:space-between;font-size:13px;padding:2px 0;border-bottom:1px solid var(--border-light);">
+                                                    <span style="color:var(--text-muted);">Receipt No:</span>
+                                                    <span>RCP-2026-XXXX</span>
+                                                </div>
+                                                <div style="display:flex;justify-content:space-between;font-size:13px;padding:2px 0;border-bottom:1px solid var(--border-light);">
+                                                    <span style="color:var(--text-muted);">Student:</span>
+                                                    <span>Aarav Sharma</span>
+                                                </div>
+                                                <div style="display:flex;justify-content:space-between;font-size:13px;padding:2px 0;border-bottom:1px solid var(--border-light);">
+                                                    <span style="color:var(--text-muted);">Amount:</span>
+                                                    <span style="font-weight:bold;font-size:16px;">₹6,000.00</span>
+                                                </div>
+                                                <div style="margin-top:12px;text-align:center;font-size:12px;color:var(--text-muted);border-top:1px solid var(--border-color);padding-top:8px;">
+                                                    <div>Thank you for your payment</div>
+                                                    <div style="margin-top:8px;">
+                                                        <div style="width:120px;border-top:1px solid #000;margin:4px auto 0;"></div>
+                                                        <span style="font-size:10px;color:var(--text-muted);">Authorized Signature</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-outline" id="previewReceiptSettingsBtn">Preview Receipt</button>
+                                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                                </div>
+                            </form>
+                        </section>
+
+                        <!-- ====== ID CARD SETTINGS ====== -->
+                        <section id="id-card-settings" class="settings-section" style="display:none;">
+                            <div class="section-header">
+                                <h3 class="section-title">ID Card Settings</h3>
+                            </div>
+                            <p class="section-desc">Configure student ID card templates and fields.</p>
+
+                            <form id="idCardSettingsForm" class="settings-form">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="idCardTitle" class="form-label">ID Card Title</label>
+                                        <input type="text" id="idCardTitle" class="form-input" placeholder="Student Identity Card" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="idCardPrefix" class="form-label">ID Card Number Prefix</label>
+                                        <input type="text" id="idCardPrefix" class="form-input" placeholder="JPA-ID" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="idCardFields" class="form-label">Fields to Display</label>
+                                        <select id="idCardFields" class="form-input" multiple style="height:100px;">
+                                            <option value="name" selected>Student Name</option>
+                                            <option value="admission" selected>Admission No</option>
+                                            <option value="class" selected>Class</option>
+                                            <option value="section" selected>Section</option>
+                                            <option value="roll" selected>Roll Number</option>
+                                            <option value="dob">Date of Birth</option>
+                                            <option value="blood">Blood Group</option>
+                                            <option value="address">Address</option>
+                                            <option value="phone">Phone</option>
+                                        </select>
+                                        <span class="form-hint">Hold Ctrl/Cmd to select multiple</span>
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label class="form-label">ID Card Preview</label>
+                                        <div style="border:1px solid var(--border-color);border-radius:var(--radius);padding:var(--spacing-md);background:var(--bg-light);max-width:400px;margin:0 auto;">
+                                            <div id="idCardSettingsPreview" style="border:2px solid var(--primary-color);border-radius:6px;padding:12px;background:var(--bg-white);">
+                                                <div style="text-align:center;border-bottom:2px solid var(--primary-color);padding-bottom:6px;margin-bottom:8px;">
+                                                    <div class="id-card-school-name" style="font-weight:bold;font-size:16px;color:var(--primary-color);">Janaki Professional Academy</div>
+                                                    <div class="id-card-school-address" style="font-size:10px;color:var(--text-muted);">Dikhlem, Dayangmukh West, Karbi Anglong, Assam – 782448</div>
+                                                </div>
+                                                <div style="display:flex;gap:12px;align-items:center;padding:8px 0;">
+                                                    <div style="width:60px;height:60px;border:2px solid var(--border-light);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--bg-light);">
+                                                        <span style="font-size:20px;font-weight:bold;color:var(--text-muted);">AS</span>
+                                                    </div>
+                                                    <div style="flex:1;">
+                                                        <div style="font-weight:bold;font-size:14px;">Aarav Sharma</div>
+                                                        <div style="font-size:11px;"><span style="color:var(--text-muted);">Admission:</span> JPA-2026-001</div>
+                                                        <div style="font-size:11px;"><span style="color:var(--text-muted);">Class:</span> 10-A</div>
+                                                        <div style="font-size:11px;"><span style="color:var(--text-muted);">Roll:</span> 101</div>
+                                                    </div>
+                                                </div>
+                                                <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);border-top:1px solid var(--border-color);padding-top:6px;">
+                                                    <span>ID: JPA-ID-2026-001</span>
+                                                    <span>Session: 2026-2027</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-outline" id="previewIdCardSettingsBtn">Preview ID Card</button>
+                                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                                </div>
+                            </form>
+                        </section>
+
+                        <!-- ====== EXPORT / IMPORT SETTINGS ====== -->
+                        <section id="export-import-settings" class="settings-section" style="display:none;">
+                            <div class="section-header">
+                                <h3 class="section-title">Export &amp; Import Settings</h3>
+                            </div>
+                            <p class="section-desc">Export all settings as a backup or import previously saved settings.</p>
+
+                            <div style="display:flex;flex-wrap:wrap;gap:var(--spacing-md);margin-bottom:var(--spacing-md);">
+                                <div style="flex:1;min-width:200px;padding:var(--spacing-md);border:1px solid var(--border-color);border-radius:var(--radius);background:var(--bg-light);">
+                                    <h4 style="margin:0 0 var(--spacing-sm) 0;font-size:var(--font-size-md);">Export Settings</h4>
+                                    <p style="font-size:var(--font-size-sm);color:var(--text-muted);margin-bottom:var(--spacing-sm);">Download all current settings as a JSON file.</p>
+                                    <button class="btn btn-primary" id="exportSettingsBtn">Export Settings</button>
+                                </div>
+                                <div style="flex:1;min-width:200px;padding:var(--spacing-md);border:1px solid var(--border-color);border-radius:var(--radius);background:var(--bg-light);">
+                                    <h4 style="margin:0 0 var(--spacing-sm) 0;font-size:var(--font-size-md);">Import Settings</h4>
+                                    <p style="font-size:var(--font-size-sm);color:var(--text-muted);margin-bottom:var(--spacing-sm);">Restore settings from a previously exported JSON file.</p>
+                                    <input type="file" id="importFile" accept=".json" style="display:none;" />
+                                    <button class="btn btn-secondary" id="importSettingsBtn">Import Settings</button>
+                                </div>
+                            </div>
+
+                            <div style="padding:var(--spacing-md);border:1px solid var(--border-color);border-radius:var(--radius);background:var(--warning-light);">
+                                <div style="display:flex;align-items:center;gap:var(--spacing-sm);">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--warning-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="8" x2="12" y2="12" />
+                                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                                    </svg>
+                                    <span style="font-size:var(--font-size-sm);color:var(--text-secondary);">
+                                        <strong>Note:</strong> Importing settings will overwrite all current configuration. This action cannot be undone.
+                                    </span>
+                                </div>
+                            </div>
+                        </section>
+
                     </div>
-                    <form id="receiptSettings">
-                        <div class="form-group">
-                            <label>Receipt Header</label>
-                            <input type="text" value="ERP·Nexus" />
-                            <div class="help-text">Appears at the top of every receipt</div>
-                        </div>
-                        <div class="form-group">
-                            <label>Receipt Sub-header / Tagline</label>
-                            <input type="text" value="Excellence in Education" />
-                        </div>
-                        <div class="form-group">
-                            <label>Receipt Footer Text</label>
-                            <input type="text" value="This is a system-generated receipt. No signature required." />
-                            <div class="help-text">Appears at the bottom of every receipt</div>
-                        </div>
-                        <div class="form-group">
-                            <label>Receipt Prefix</label>
-                            <input type="text" value="RCP" />
-                            <div class="help-text">e.g., RCP, INV, REC</div>
-                        </div>
-                        <div class="form-group">
-                            <label>Receipt Number Format</label>
-                            <select>
-                                <option>{PREFIX}-{YEAR}-{SEQ:4}</option>
-                                <option selected>{PREFIX}-{YEAR}-{SEQ:4}</option>
-                                <option>{PREFIX}-{SEQ:6}</option>
-                                <option>{PREFIX}-{YY}{SEQ:4}</option>
-                            </select>
-                            <div class="help-text">Preview: <span class="id-preview">RCP-2026-0042</span></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Current Receipt Number (auto-increment starts from)</label>
-                            <input type="number" value="1001" />
-                        </div>
-                        <div class="toggle-row">
-                            <div class="label">Show QR Code on Receipt <span class="desc">· for digital verification</span></div>
-                            <div class="toggle active" onclick="this.classList.toggle('active')">
-                                <div class="knob"></div>
-                            </div>
-                        </div>
-                        <div class="toggle-row">
-                            <div class="label">Show Signature Line <span class="desc">· authorized signature placeholder</span></div>
-                            <div class="toggle active" onclick="this.classList.toggle('active')">
-                                <div class="knob"></div>
-                            </div>
-                        </div>
-                    </form>
                 </div>
 
-                <!-- ID Generation Settings -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="18" height="18" rx="2" />
-                                <line x1="3" y1="9" x2="21" y2="9" />
-                                <line x1="3" y1="15" x2="21" y2="15" />
-                                <line x1="9" y1="21" x2="9" y2="3" />
-                            </svg>
-                            ID Generation Settings
-                        </h3>
-                    </div>
-                    <form id="idSettings">
-                        <div class="form-group">
-                            <label>Student ID Prefix</label>
-                            <input type="text" value="STU" />
-                            <div class="help-text">Preview: <span class="id-preview">STU-2026-00125</span></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Teacher ID Prefix</label>
-                            <input type="text" value="TCH" />
-                            <div class="help-text">Preview: <span class="id-preview">TCH-2026-0042</span></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Admission Application ID Prefix</label>
-                            <input type="text" value="APP" />
-                            <div class="help-text">Preview: <span class="id-preview">APP-2026-0187</span></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Employee / Staff ID Prefix</label>
-                            <input type="text" value="EMP" />
-                            <div class="help-text">Preview: <span class="id-preview">EMP-2026-0031</span></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Transaction ID Prefix</label>
-                            <input type="text" value="TXN" />
-                            <div class="help-text">Preview: <span class="id-preview">TXN-20260901-0042</span></div>
-                        </div>
-                        <div class="form-group">
-                            <label>ID Number Format</label>
-                            <select>
-                                <option selected>{PREFIX}-{YEAR}-{SEQ:5}</option>
-                                <option>{PREFIX}-{SEQ:6}</option>
-                                <option>{PREFIX}-{YY}-{SEQ:4}</option>
-                                <option>{PREFIX}-{SEQ:8}</option>
-                            </select>
-                            <div class="help-text">Use {PREFIX}, {YEAR}, {YY}, {SEQ:n} where n = number of digits</div>
-                        </div>
-                        <div class="form-group">
-                            <label>Auto-increment Starting Number (per prefix)</label>
-                            <input type="number" value="1001" />
-                            <div class="help-text">Each prefix maintains its own sequence</div>
-                        </div>
-                    </form>
+                <!-- ========== SAVE STATUS ========== -->
+                <div id="saveStatus" class="save-status hidden">
+                    <span class="status-message">Settings saved successfully</span>
                 </div>
 
-                <!-- Academic Settings -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                            </svg>
-                            Academic Settings
-                        </h3>
-                    </div>
-                    <form id="academicSettings">
-                        <div class="form-group">
-                            <label>Current Academic Year</label>
-                            <input type="text" value="2026-27" />
-                            <div class="help-text">Format: YYYY-YY</div>
-                        </div>
-                        <div class="form-group">
-                            <label>Academic Year Start Date</label>
-                            <input type="date" value="2026-06-01" />
-                        </div>
-                        <div class="form-group">
-                            <label>Academic Year End Date</label>
-                            <input type="date" value="2027-05-31" />
-                        </div>
-                        <div class="form-group">
-                            <label>Current Term / Semester</label>
-                            <select>
-                                <option>Term 1 (Apr-Sep)</option>
-                                <option selected>Term 2 (Oct-Mar)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Default Class Strength (Capacity)</label>
-                            <input type="number" value="40" />
-                        </div>
-                        <div class="toggle-row">
-                            <div class="label">Auto-Promote Students <span class="desc">· at end of academic year</span></div>
-                            <div class="toggle active" onclick="this.classList.toggle('active')">
-                                <div class="knob"></div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Notification Settings -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                            </svg>
-                            Notification Settings
-                        </h3>
-                    </div>
-                    <form id="notificationSettings">
-                        <div class="toggle-row">
-                            <div class="label">Email Notifications <span class="desc">· all system emails</span></div>
-                            <div class="toggle active" onclick="this.classList.toggle('active')">
-                                <div class="knob"></div>
-                            </div>
-                        </div>
-                        <div class="toggle-row">
-                            <div class="label">SMS Notifications <span class="desc">· via Twilio / SMS gateway</span></div>
-                            <div class="toggle" onclick="this.classList.toggle('active')">
-                                <div class="knob"></div>
-                            </div>
-                        </div>
-                        <div class="toggle-row">
-                            <div class="label">WhatsApp Notifications <span class="desc">· via WhatsApp Business API</span></div>
-                            <div class="toggle" onclick="this.classList.toggle('active')">
-                                <div class="knob"></div>
-                            </div>
-                        </div>
-                        <div class="toggle-row">
-                            <div class="label">Portal Notifications <span class="desc">· in-app notification center</span></div>
-                            <div class="toggle active" onclick="this.classList.toggle('active')">
-                                <div class="knob"></div>
-                            </div>
-                        </div>
-                        <div class="toggle-row">
-                            <div class="label">Fee Due Alerts <span class="desc">· auto-notify on overdue</span></div>
-                            <div class="toggle active" onclick="this.classList.toggle('active')">
-                                <div class="knob"></div>
-                            </div>
-                        </div>
-                        <div class="toggle-row">
-                            <div class="label">Attendance Alerts <span class="desc">· notify on low attendance</span></div>
-                            <div class="toggle" onclick="this.classList.toggle('active')">
-                                <div class="knob"></div>
-                            </div>
-                        </div>
-                        <div class="form-group" style="margin-top:12px;">
-                            <label>Notification Recipients (comma separated)</label>
-                            <input type="text" value="admin@erp.com, principal@erp.com" />
-                            <div class="help-text">For system-wide notifications</div>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- System Settings -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="3" />
-                                <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l2.5 2.5a1.65 1.65 0 0 0 1.18.5h6.44a1.65 1.65 0 0 0 1.18-.5l2.5-2.5z" />
-                            </svg>
-                            System Settings
-                        </h3>
-                    </div>
-                    <form id="systemSettings">
-                        <div class="form-group">
-                            <label>System Timezone</label>
-                            <select>
-                                <option>UTC</option>
-                                <option selected>Asia/Kolkata (UTC+5:30)</option>
-                                <option>America/New_York (UTC-4)</option>
-                                <option>Europe/London (UTC+1)</option>
-                                <option>Australia/Sydney (UTC+10)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Date Format</label>
-                            <select>
-                                <option>DD-MM-YYYY</option>
-                                <option selected>DD-MM-YYYY</option>
-                                <option>MM-DD-YYYY</option>
-                                <option>YYYY-MM-DD</option>
-                                <option>DD MMM YYYY</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Currency Symbol</label>
-                            <input type="text" value="₹" />
-                        </div>
-                        <div class="form-group">
-                            <label>Currency Code</label>
-                            <input type="text" value="INR" />
-                        </div>
-                        <div class="toggle-row">
-                            <div class="label">Maintenance Mode <span class="desc">· display maintenance page</span></div>
-                            <div class="toggle" onclick="this.classList.toggle('active')">
-                                <div class="knob"></div>
-                            </div>
-                        </div>
-                        <div class="toggle-row">
-                            <div class="label">Debug Mode <span class="desc">· show detailed errors</span></div>
-                            <div class="toggle" onclick="this.classList.toggle('active')">
-                                <div class="knob"></div>
-                            </div>
-                        </div>
-                        <div class="form-group" style="margin-top:12px;">
-                            <label>Backup Schedule</label>
-                            <select>
-                                <option>Daily</option>
-                                <option selected>Daily</option>
-                                <option>Weekly</option>
-                                <option>Monthly</option>
-                                <option>Manual Only</option>
-                            </select>
-                            <div class="help-text">Automatic database backups</div>
-                        </div>
-                        <div class="form-group">
-                            <label>Backup Retention (days)</label>
-                            <input type="number" value="30" />
-                        </div>
-                    </form>
-                    <div class="action-buttons">
-                        <button class="btn btn-danger" onclick="if(confirm('Reset all settings to defaults?')) alert('Settings reset! (Demo)');">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="1 4 1 10 7 10" />
-                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
-                            </svg>
-                            Reset to Defaults
-                        </button>
-                        <button class="btn btn-success" onclick="alert('Backup initiated! (Demo)')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                <polyline points="17 8 12 3 7 8" />
-                                <line x1="12" y1="3" x2="12" y2="15" />
-                            </svg>
-                            Backup Now
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="app-footer">
-        <p>&copy; 2026 ERP·Nexus — System Settings · configure your ERP</p>
-        <div class="footer-links">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Support</a>
+            </main>
         </div>
-    </footer>
+
+        <!-- ========== FOOTER ========== -->
+        <footer class="site-footer site-footer--app">
+            <div class="footer-inner">
+                <p class="footer-copy">
+                    &copy; 2026 Janaki Professional Academy. All rights reserved.
+                </p>
+                <p class="footer-powered">
+                    School Management ERP v1.0 &bull; Phase 1 Frontend
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ========== EXTERNAL JAVASCRIPT ========== -->
+    <script src="js/script.js"></script>
+    <script src="js/toggle.js"></script>
+    <script src="js/settings.js"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Students – Janaki Professional Academy ERP</title>
+    <title>Student Management – Janaki Professional Academy ERP</title>
 
     <!-- External CSS -->
     <link rel="stylesheet" href="css/root.css" />
@@ -24,7 +24,6 @@
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
                 </button>
-
                 <div class="header-brand">
                     <a href="dashboard.html" class="brand-link">
                         <span class="brand-icon">
@@ -37,12 +36,10 @@
                         <span class="brand-name">Janaki Professional Academy</span>
                     </a>
                 </div>
-
                 <div class="header-session">
                     <span class="session-label">Academic Session:</span>
                     <span class="session-value" id="academicSession">2026-2027</span>
                 </div>
-
                 <div class="header-user">
                     <div class="user-profile">
                         <span class="user-avatar">A</span>
@@ -63,10 +60,12 @@
         <!-- ========== SIDEBAR + MAIN CONTENT ========== -->
         <div class="app-body">
 
-            <!-- ========== SIDEBAR ========== -->
+            <!-- ========== SIDEBAR (EXACTLY MATCHES DASHBOARD) ========== -->
             <nav class="sidebar" id="sidebar">
                 <div class="sidebar-inner">
                     <ul class="nav-list">
+
+                        <!-- Dashboard -->
                         <li class="nav-item">
                             <a href="dashboard.html" class="nav-link">
                                 <span class="nav-icon">
@@ -81,6 +80,7 @@
                             </a>
                         </li>
 
+                        <!-- Student Management -->
                         <li class="nav-item active nav-parent">
                             <a href="#students-sub" class="nav-link nav-toggle open" data-target="students-sub">
                                 <span class="nav-icon">
@@ -109,6 +109,7 @@
                             </ul>
                         </li>
 
+                        <!-- Teachers & Staff -->
                         <li class="nav-item nav-parent">
                             <a href="#teachers-sub" class="nav-link nav-toggle" data-target="teachers-sub">
                                 <span class="nav-icon">
@@ -133,6 +134,7 @@
                             </ul>
                         </li>
 
+                        <!-- Fee Management -->
                         <li class="nav-item nav-parent">
                             <a href="#fees-sub" class="nav-link nav-toggle" data-target="fees-sub">
                                 <span class="nav-icon">
@@ -159,6 +161,7 @@
                             </ul>
                         </li>
 
+                        <!-- Salary Management -->
                         <li class="nav-item nav-parent">
                             <a href="#salary-sub" class="nav-link nav-toggle" data-target="salary-sub">
                                 <span class="nav-icon">
@@ -182,6 +185,7 @@
                             </ul>
                         </li>
 
+                        <!-- Attendance -->
                         <li class="nav-item nav-parent">
                             <a href="#attendance-sub" class="nav-link nav-toggle" data-target="attendance-sub">
                                 <span class="nav-icon">
@@ -205,6 +209,7 @@
                             </ul>
                         </li>
 
+                        <!-- Academic -->
                         <li class="nav-item nav-parent">
                             <a href="#academic-sub" class="nav-link nav-toggle" data-target="academic-sub">
                                 <span class="nav-icon">
@@ -232,6 +237,7 @@
                             </ul>
                         </li>
 
+                        <!-- Communication -->
                         <li class="nav-item nav-parent">
                             <a href="#comm-sub" class="nav-link nav-toggle" data-target="comm-sub">
                                 <span class="nav-icon">
@@ -254,6 +260,7 @@
                             </ul>
                         </li>
 
+                        <!-- Reports -->
                         <li class="nav-item nav-parent">
                             <a href="#reports-sub" class="nav-link nav-toggle" data-target="reports-sub">
                                 <span class="nav-icon">
@@ -281,6 +288,7 @@
                             </ul>
                         </li>
 
+                        <!-- Receipts & Docs -->
                         <li class="nav-item nav-parent">
                             <a href="#docs-sub" class="nav-link nav-toggle" data-target="docs-sub">
                                 <span class="nav-icon">
@@ -307,6 +315,7 @@
                             </ul>
                         </li>
 
+                        <!-- Admin -->
                         <li class="nav-item nav-parent">
                             <a href="#admin-sub" class="nav-link nav-toggle" data-target="admin-sub">
                                 <span class="nav-icon">
@@ -330,497 +339,24 @@
                                 <li><a href="profile.html">My Profile</a></li>
                             </ul>
                         </li>
+
                     </ul>
                 </div>
             </nav>
 
             <!-- ========== MAIN CONTENT ========== -->
             <main class="main-content">
-
-                <!-- Page Header -->
-                <div class="page-header">
-                    <h1 class="page-title">Student Management</h1>
-                    <div class="page-actions">
-                        <a href="add-student.html" class="btn btn-primary">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                            </svg>
-                            Add Student
-                        </a>
-                    </div>
-                </div>
-
-                <!-- ========== TOOLBAR ========== -->
-                <div class="data-toolbar">
-                    <div class="toolbar-left">
-                        <div class="search-wrapper">
-                            <span class="search-icon">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="11" cy="11" r="8" />
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                                </svg>
-                            </span>
-                            <input type="text" class="search-input" id="studentSearch" placeholder="Search by name, admission no, or class..." />
-                        </div>
-                    </div>
-                    <div class="toolbar-right">
-                        <div class="filter-group">
-                            <select class="filter-select" id="classFilter">
-                                <option value="">All Classes</option>
-                                <option value="1">Class 1</option>
-                                <option value="2">Class 2</option>
-                                <option value="3">Class 3</option>
-                                <option value="4">Class 4</option>
-                                <option value="5">Class 5</option>
-                                <option value="6">Class 6</option>
-                                <option value="7">Class 7</option>
-                                <option value="8">Class 8</option>
-                                <option value="9">Class 9</option>
-                                <option value="10">Class 10</option>
-                                <option value="11">Class 11</option>
-                                <option value="12">Class 12</option>
-                            </select>
-                            <select class="filter-select" id="statusFilter">
-                                <option value="">All Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="transferred">Transferred</option>
-                                <option value="graduated">Graduated</option>
-                            </select>
-                        </div>
-                        <div class="export-group">
-                            <button class="btn btn-outline" id="exportPdfBtn">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                    <polyline points="14 2 14 8 20 8" />
-                                    <line x1="12" y1="18" x2="12" y2="12" />
-                                    <line x1="9" y1="15" x2="12" y2="18" />
-                                    <line x1="15" y1="15" x2="12" y2="18" />
-                                </svg>
-                                PDF
-                            </button>
-                            <button class="btn btn-outline" id="exportExcelBtn">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                    <polyline points="14 2 14 8 20 8" />
-                                    <line x1="8" y1="16" x2="16" y2="16" />
-                                    <line x1="8" y1="12" x2="16" y2="12" />
-                                    <line x1="8" y1="8" x2="10" y2="8" />
-                                </svg>
-                                Excel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ========== STUDENTS TABLE ========== -->
-                <div class="table-responsive">
-                    <table class="data-table" id="studentsTable">
-                        <thead>
-                            <tr>
-                                <th class="col-checkbox">
-                                    <input type="checkbox" id="selectAll" />
-                                </th>
-                                <th class="col-admission">Admission No</th>
-                                <th class="col-name">Student Name</th>
-                                <th class="col-class">Class</th>
-                                <th class="col-section">Section</th>
-                                <th class="col-father">Father's Name</th>
-                                <th class="col-contact">Contact</th>
-                                <th class="col-status">Status</th>
-                                <th class="col-actions">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="studentsTableBody">
-                            <!-- Static demo data – Phase 1 -->
-                            <tr>
-                                <td><input type="checkbox" class="row-checkbox" /></td>
-                                <td>JPA-2026-001</td>
-                                <td><a href="student-profile.html" class="student-link">Aarav Sharma</a></td>
-                                <td>10</td>
-                                <td>A</td>
-                                <td>Rajesh Sharma</td>
-                                <td>9876543210</td>
-                                <td><span class="status-badge active">Active</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <a href="student-profile.html" class="action-btn view" title="View">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                        </a>
-                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                            </svg>
-                                        </a>
-                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-001">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="row-checkbox" /></td>
-                                <td>JPA-2026-002</td>
-                                <td><a href="student-profile.html" class="student-link">Priya Das</a></td>
-                                <td>8</td>
-                                <td>B</td>
-                                <td>Anjan Das</td>
-                                <td>9876543211</td>
-                                <td><span class="status-badge active">Active</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <a href="student-profile.html" class="action-btn view" title="View">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                        </a>
-                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                            </svg>
-                                        </a>
-                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-002">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="row-checkbox" /></td>
-                                <td>JPA-2026-003</td>
-                                <td><a href="student-profile.html" class="student-link">Rohit Gogoi</a></td>
-                                <td>12</td>
-                                <td>A</td>
-                                <td>Mohan Gogoi</td>
-                                <td>9876543212</td>
-                                <td><span class="status-badge active">Active</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <a href="student-profile.html" class="action-btn view" title="View">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                        </a>
-                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                            </svg>
-                                        </a>
-                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-003">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="row-checkbox" /></td>
-                                <td>JPA-2026-004</td>
-                                <td><a href="student-profile.html" class="student-link">Sneha Borah</a></td>
-                                <td>5</td>
-                                <td>A</td>
-                                <td>Krishna Borah</td>
-                                <td>9876543213</td>
-                                <td><span class="status-badge active">Active</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <a href="student-profile.html" class="action-btn view" title="View">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                        </a>
-                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                            </svg>
-                                        </a>
-                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-004">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="row-checkbox" /></td>
-                                <td>JPA-2026-005</td>
-                                <td><a href="student-profile.html" class="student-link">Arjun Deka</a></td>
-                                <td>9</td>
-                                <td>C</td>
-                                <td>Babul Deka</td>
-                                <td>9876543214</td>
-                                <td><span class="status-badge inactive">Inactive</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <a href="student-profile.html" class="action-btn view" title="View">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                        </a>
-                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                            </svg>
-                                        </a>
-                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-005">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="row-checkbox" /></td>
-                                <td>JPA-2026-006</td>
-                                <td><a href="student-profile.html" class="student-link">Ananya Bora</a></td>
-                                <td>7</td>
-                                <td>B</td>
-                                <td>Ramesh Bora</td>
-                                <td>9876543215</td>
-                                <td><span class="status-badge active">Active</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <a href="student-profile.html" class="action-btn view" title="View">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                        </a>
-                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                            </svg>
-                                        </a>
-                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-006">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="row-checkbox" /></td>
-                                <td>JPA-2026-007</td>
-                                <td><a href="student-profile.html" class="student-link">Rahul Talukdar</a></td>
-                                <td>11</td>
-                                <td>A</td>
-                                <td>Dhruba Talukdar</td>
-                                <td>9876543216</td>
-                                <td><span class="status-badge transferred">Transferred</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <a href="student-profile.html" class="action-btn view" title="View">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                        </a>
-                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                            </svg>
-                                        </a>
-                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-007">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="row-checkbox" /></td>
-                                <td>JPA-2026-008</td>
-                                <td><a href="student-profile.html" class="student-link">Maya Chetia</a></td>
-                                <td>6</td>
-                                <td>C</td>
-                                <td>Paban Chetia</td>
-                                <td>9876543217</td>
-                                <td><span class="status-badge active">Active</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <a href="student-profile.html" class="action-btn view" title="View">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                        </a>
-                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                            </svg>
-                                        </a>
-                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-008">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="row-checkbox" /></td>
-                                <td>JPA-2026-009</td>
-                                <td><a href="student-profile.html" class="student-link">Krishna Saikia</a></td>
-                                <td>4</td>
-                                <td>A</td>
-                                <td>Naren Saikia</td>
-                                <td>9876543218</td>
-                                <td><span class="status-badge active">Active</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <a href="student-profile.html" class="action-btn view" title="View">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                        </a>
-                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                            </svg>
-                                        </a>
-                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-009">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="row-checkbox" /></td>
-                                <td>JPA-2026-010</td>
-                                <td><a href="student-profile.html" class="student-link">Deepak Phukan</a></td>
-                                <td>3</td>
-                                <td>B</td>
-                                <td>Bipin Phukan</td>
-                                <td>9876543219</td>
-                                <td><span class="status-badge graduated">Graduated</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <a href="student-profile.html" class="action-btn view" title="View">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                        </a>
-                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                            </svg>
-                                        </a>
-                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-010">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- ========== PAGINATION ========== -->
-                <div class="table-footer">
-                    <div class="table-info">
-                        <span>Showing <strong>1</strong> to <strong>10</strong> of <strong>1247</strong> students</span>
-                    </div>
-                    <div class="pagination">
-                        <button class="page-btn" disabled>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="15 18 9 12 15 6" />
-                            </svg>
-                        </button>
-                        <button class="page-btn active">1</button>
-                        <button class="page-btn">2</button>
-                        <button class="page-btn">3</button>
-                        <button class="page-btn">4</button>
-                        <button class="page-btn">5</button>
-                        <span class="page-ellipsis">...</span>
-                        <button class="page-btn">125</button>
-                        <button class="page-btn">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="9 18 15 12 9 6" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
+                <!-- Page content continues... -->
             </main>
         </div>
 
         <!-- ========== FOOTER ========== -->
         <footer class="site-footer site-footer--app">
             <div class="footer-inner">
-                <p class="footer-copy">
-                    &copy; 2026 Janaki Professional Academy. All rights reserved.
-                </p>
-                <p class="footer-powered">
-                    School Management ERP v1.0 &bull; Phase 1 Frontend
-                </p>
+                <p class="footer-copy">&copy; 2026 Janaki Professional Academy. All rights reserved.</p>
+                <p class="footer-powered">School Management ERP v1.0 &bull; Phase 1 Frontend</p>
             </div>
         </footer>
-    </div>
-
-    <!-- ========== DELETE CONFIRMATION MODAL ========== -->
-    <div class="modal-overlay hidden" id="deleteModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Confirm Deletion</h3>
-                <button class="modal-close" id="deleteModalClose">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete the student record with Admission No: <strong id="deleteStudentId"></strong>?</p>
-                <p class="modal-warning">This action cannot be undone.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" id="deleteModalCancel">Cancel</button>
-                <button class="btn btn-danger" id="deleteModalConfirm">Delete</button>
-            </div>
-        </div>
     </div>
 
     <!-- ========== EXTERNAL JAVASCRIPT ========== -->

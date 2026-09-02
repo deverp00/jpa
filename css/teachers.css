@@ -179,175 +179,13 @@
     text-decoration: underline;
 }
 
-/* ----- Status Badge Variations ----- */
+/* ----- Status Badge Variation ----- */
 .status-badge.on-leave {
     background: var(--warning-light);
     color: var(--warning-dark);
 }
 
-/* ----- Add/Edit Teacher Form ----- */
-.form-container {
-    max-width: 100%;
-}
-
-.form-section {
-    background: var(--bg-white);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    padding: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
-}
-
-.form-section .section-title {
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
-    margin: 0 0 var(--spacing-md) 0;
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-md);
-}
-
-.form-grid .full-width {
-    grid-column: 1 / -1;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-}
-
-.form-label {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--text-secondary);
-}
-
-.form-label.required::after {
-    content: "*";
-    color: var(--danger-color);
-    margin-left: var(--spacing-xs);
-}
-
-.form-input {
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    font-size: var(--font-size-sm);
-    font-family: inherit;
-    color: var(--text-primary);
-    background: var(--bg-white);
-    width: 100%;
-    transition: border-color 0.2s ease;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
-}
-
-.form-input::placeholder {
-    color: var(--text-muted);
-}
-
-.form-input-sm {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: var(--font-size-xs);
-}
-
-textarea.form-input {
-    resize: vertical;
-    min-height: 80px;
-}
-
-select.form-input {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7a8a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right var(--spacing-md) center;
-    padding-right: var(--spacing-xl);
-    cursor: pointer;
-}
-
-.form-error {
-    font-size: var(--font-size-xs);
-    color: var(--danger-color);
-    min-height: 1.2em;
-    display: none;
-}
-
-.form-error.visible {
-    display: block;
-}
-
-.form-hint {
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
-}
-
-.file-hint {
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
-    margin-top: var(--spacing-xs);
-}
-
-/* ----- Form Actions ----- */
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md) 0;
-    border-top: 1px solid var(--border-color);
-    margin-top: var(--spacing-lg);
-}
-
-/* ----- Success Message ----- */
-.form-success {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
-    background: var(--success-light);
-    border: 1px solid var(--success-color);
-    border-radius: var(--radius);
-    margin-top: var(--spacing-lg);
-}
-
-.form-success svg {
-    flex-shrink: 0;
-    color: var(--success-color);
-}
-
-.form-success h3 {
-    margin: 0 0 var(--spacing-xs) 0;
-    color: var(--success-dark);
-    font-size: var(--font-size-md);
-}
-
-.form-success p {
-    margin: 0 0 var(--spacing-sm) 0;
-    color: var(--text-secondary);
-}
-
-.success-actions {
-    display: flex;
-    gap: var(--spacing-sm);
-    flex-wrap: wrap;
-}
-
-.success-actions .btn-sm {
-    padding: var(--spacing-xs) var(--spacing-md);
-    font-size: var(--font-size-sm);
-}
-
-/* ----- Teacher/Staff Stats ----- */
+/* ----- Teacher Stats ----- */
 .teacher-stats,
 .staff-stats {
     display: grid;
@@ -403,19 +241,6 @@ select.form-input {
     .profile-details-grid {
         grid-template-columns: 1fr;
     }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .form-actions {
-        flex-direction: column-reverse;
-    }
-
-    .form-actions .btn {
-        width: 100%;
-        justify-content: center;
-    }
 }
 
 @media (max-width: 576px) {
@@ -432,5 +257,10 @@ select.form-input {
     .detail-value {
         text-align: left;
         max-width: 100%;
+    }
+
+    .teacher-stats,
+    .staff-stats {
+        grid-template-columns: 1fr 1fr;
     }
 }

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fee Due – Janaki Professional Academy ERP</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/root.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/fees.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+</head>
+<body>
+
+    <!-- ========== APP WRAPPER ========== -->
+    <div class="app-wrapper">
+
+        <!-- ========== HEADER ========== -->
+        <header class="app-header" id="appHeader">
+            <div class="header-inner">
+                <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+
+                <div class="header-brand">
+                    <a href="dashboard.html" class="brand-link">
+                        <span class="brand-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                                <path d="M2 17l10 5 10-5" />
+                                <path d="M2 12l10 5 10-5" />
+                            </svg>
+                        </span>
+                        <span class="brand-name">Janaki Professional Academy</span>
+                    </a>
+                </div>
+
+                <div class="header-session">
+                    <span class="session-label">Academic Session:</span>
+                    <span class="session-value" id="academicSession">2026-2027</span>
+                </div>
+
+                <div class="header-user">
+                    <div class="user-profile">
+                        <span class="user-avatar">A</span>
+                        <span class="user-name" id="userName">Admin</span>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn" aria-label="Logout">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        <span class="logout-text">Logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- ========== SIDEBAR + MAIN CONTENT ========== -->
+        <div class="app-body">
+
+            <!-- ========== SIDEBAR ========== -->
+            <nav class="sidebar" id="sidebar">
+                <div class="sidebar-inner">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="7" height="7" />
+                                        <rect x="14" y="3" width="7" height="7" />
+                                        <rect x="14" y="14" width="7" height="7" />
+                                        <rect x="3" y="14" width="7" height="7" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#students-sub" class="nav-link nav-toggle" data-target="students-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Students</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="students-sub">
+                                <li><a href="students.html">All Students</a></li>
+                                <li><a href="add-student.html">Add Student</a></li>
+                                <li><a href="student-admission.html">Admissions</a></li>
+                                <li><a href="student-promotion.html">Promotion</a></li>
+                                <li><a href="student-transfer.html">Transfer</a></li>
+                                <li><a href="student-id-card.html">ID Cards</a></li>
+                                <li><a href="student-documents.html">Documents</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#teachers-sub" class="nav-link nav-toggle" data-target="teachers-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 20v-6M8 20V8a4 4 0 0 1 8 0v12" />
+                                        <circle cx="12" cy="4" r="2" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Teachers & Staff</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="teachers-sub">
+                                <li><a href="teachers.html">All Teachers</a></li>
+                                <li><a href="add-teacher.html">Add Teacher</a></li>
+                                <li><a href="teacher-profile.html">Teacher Profile</a></li>
+                                <li><a href="staff.html">All Staff</a></li>
+                                <li><a href="staff-profile.html">Staff Profile</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item active nav-parent">
+                            <a href="#fees-sub" class="nav-link nav-toggle open" data-target="fees-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="8" x2="12" y2="16" />
+                                        <line x1="8" y1="12" x2="16" y2="12" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Fee Management</span>
+                                <span class="nav-arrow open">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub open" id="fees-sub">
+                                <li><a href="fees.html">All Fees</a></li>
+                                <li><a href="fee-structure.html">Fee Structure</a></li>
+                                <li><a href="collect-fee.html">Collect Fee</a></li>
+                                <li><a href="fee-history.html">Fee History</a></li>
+                                <li><a href="fee-due.html" class="active">Fee Due</a></li>
+                                <li><a href="fee-receipt.html">Fee Receipt</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#salary-sub" class="nav-link nav-toggle" data-target="salary-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 2v4M12 22v-4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M22 12h-4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Salary Management</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="salary-sub">
+                                <li><a href="salary.html">All Salaries</a></li>
+                                <li><a href="salary-structure.html">Salary Structure</a></li>
+                                <li><a href="salary-payment.html">Make Payment</a></li>
+                                <li><a href="salary-history.html">Salary History</a></li>
+                                <li><a href="salary-slip.html">Salary Slip</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#attendance-sub" class="nav-link nav-toggle" data-target="attendance-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Attendance</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="attendance-sub">
+                                <li><a href="attendance.html">Dashboard</a></li>
+                                <li><a href="student-attendance.html">Student Attendance</a></li>
+                                <li><a href="staff-attendance.html">Staff Attendance</a></li>
+                                <li><a href="attendance-report.html">Attendance Report</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#academic-sub" class="nav-link nav-toggle" data-target="academic-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Academic</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="academic-sub">
+                                <li><a href="classes.html">Classes</a></li>
+                                <li><a href="sections.html">Sections</a></li>
+                                <li><a href="subjects.html">Subjects</a></li>
+                                <li><a href="academic-session.html">Academic Session</a></li>
+                                <li><a href="timetable.html">Timetable</a></li>
+                                <li><a href="examinations.html">Examinations</a></li>
+                                <li><a href="results.html">Results</a></li>
+                                <li><a href="report-card.html">Report Cards</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#comm-sub" class="nav-link nav-toggle" data-target="comm-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Communication</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="comm-sub">
+                                <li><a href="notices.html">Notices</a></li>
+                                <li><a href="events.html">Events</a></li>
+                                <li><a href="announcements.html">Announcements</a></li>
+                                <li><a href="calendar.html">Calendar</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#reports-sub" class="nav-link nav-toggle" data-target="reports-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
+                                        <path d="M3 18h18v-4H3z" />
+                                        <path d="M7 18v4" />
+                                        <path d="M17 18v4" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Reports</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="reports-sub">
+                                <li><a href="reports.html">All Reports</a></li>
+                                <li><a href="student-reports.html">Student Reports</a></li>
+                                <li><a href="fee-reports.html">Fee Reports</a></li>
+                                <li><a href="salary-reports.html">Salary Reports</a></li>
+                                <li><a href="attendance-reports.html">Attendance Reports</a></li>
+                                <li><a href="academic-reports.html">Academic Reports</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#docs-sub" class="nav-link nav-toggle" data-target="docs-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="16" y1="13" x2="8" y2="13" />
+                                        <line x1="16" y1="17" x2="8" y2="17" />
+                                        <polyline points="10 9 9 9 8 9" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Receipts & Docs</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="docs-sub">
+                                <li><a href="receipts.html">All Receipts</a></li>
+                                <li><a href="receipt-view.html">View Receipt</a></li>
+                                <li><a href="certificate.html">Certificates</a></li>
+                                <li><a href="document-generator.html">Document Generator</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#admin-sub" class="nav-link nav-toggle" data-target="admin-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="3" />
+                                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Admin</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="admin-sub">
+                                <li><a href="users.html">Users</a></li>
+                                <li><a href="roles.html">Roles</a></li>
+                                <li><a href="permissions.html">Permissions</a></li>
+                                <li><a href="admin-settings.html">Admin Settings</a></li>
+                                <li><a href="profile.html">My Profile</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- ========== MAIN CONTENT ========== -->
+            <main class="main-content">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <a href="fees.html" class="back-link">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12" />
+                                <polyline points="12 19 5 12 12 5" />
+                            </svg>
+                            Back to Fees
+                        </a>
+                        <h1 class="page-title">Fee Due</h1>
+                        <span class="page-subtitle">Students with pending fee payments</span>
+                    </div>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="sendRemindersBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                            </svg>
+                            Send Reminders
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ========== STATS ========== -->
+                <div class="fee-stats">
+                    <div class="stat-card pending">
+                        <span class="stat-value">₹2,31,500</span>
+                        <span class="stat-label">Total Due</span>
+                    </div>
+                    <div class="stat-card overdue">
+                        <span class="stat-value">43</span>
+                        <span class="stat-label">Students with Due</span>
+                    </div>
+                    <div class="stat-card overdue">
+                        <span class="stat-value">15</span>
+                        <span class="stat-label">Overdue (&gt;30 days)</span>
+                    </div>
+                </div>
+
+                <!-- ========== TOOLBAR ========== -->
+                <div class="data-toolbar">
+                    <div class="toolbar-left">
+                        <div class="search-wrapper">
+                            <span class="search-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                </svg>
+                            </span>
+                            <input type="text" class="search-input" id="feeDueSearch" placeholder="Search by student name or admission no..." />
+                        </div>
+                    </div>
+                    <div class="toolbar-right">
+                        <div class="filter-group">
+                            <select class="filter-select" id="dueClassFilter">
+                                <option value="">All Classes</option>
+                                <option value="1">Class 1</option>
+                                <option value="2">Class 2</option>
+                                <option value="3">Class 3</option>
+                                <option value="4">Class 4</option>
+                                <option value="5">Class 5</option>
+                                <option value="6">Class 6</option>
+                                <option value="7">Class 7</option>
+                                <option value="8">Class 8</option>
+                                <option value="9">Class 9</option>
+                                <option value="10">Class 10</option>
+                                <option value="11">Class 11</option>
+                                <option value="12">Class 12</option>
+                            </select>
+                            <select class="filter-select" id="dueStatusFilter">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="overdue">Overdue</option>
+                            </select>
+                        </div>
+                        <div class="export-group">
+                            <button class="btn btn-outline" id="exportDuePdfBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="12" y1="18" x2="12" y2="12" />
+                                    <line x1="9" y1="15" x2="12" y2="18" />
+                                    <line x1="15" y1="15" x2="12" y2="18" />
+                                </svg>
+                                PDF
+                            </button>
+                            <button class="btn btn-outline" id="exportDueExcelBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="8" y1="16" x2="16" y2="16" />
+                                    <line x1="8" y1="12" x2="16" y2="12" />
+                                    <line x1="8" y1="8" x2="10" y2="8" />
+                                </svg>
+                                Excel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========== DUE LIST TABLE ========== -->
+                <div class="table-responsive">
+                    <table class="data-table" id="feeDueTable">
+                        <thead>
+                            <tr>
+                                <th class="col-checkbox">
+                                    <input type="checkbox" id="selectAll" />
+                                </th>
+                                <th>Admission No</th>
+                                <th>Student Name</th>
+                                <th>Class</th>
+                                <th>Due Amount</th>
+                                <th>Due Date</th>
+                                <th>Days Overdue</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="feeDueTableBody">
+                            <!-- Minimal demo data -->
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-002</td>
+                                <td><a href="student-profile.html" class="student-link">Priya Das</a></td>
+                                <td>8-B</td>
+                                <td>₹5,000</td>
+                                <td>2026-07-01</td>
+                                <td>5</td>
+                                <td><span class="status-badge pending">Pending</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="collect-fee.html" class="action-btn edit" title="Collect Fee">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <line x1="12" y1="8" x2="12" y2="16" />
+                                                <line x1="8" y1="12" x2="16" y2="12" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn send-reminder-btn" title="Send Reminder">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-003</td>
+                                <td><a href="student-profile.html" class="student-link">Rohit Gogoi</a></td>
+                                <td>12-A</td>
+                                <td>₹7,000</td>
+                                <td>2026-08-01</td>
+                                <td>35</td>
+                                <td><span class="status-badge overdue">Overdue</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="collect-fee.html" class="action-btn edit" title="Collect Fee">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <line x1="12" y1="8" x2="12" y2="16" />
+                                                <line x1="8" y1="12" x2="16" y2="12" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn send-reminder-btn" title="Send Reminder">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-005</td>
+                                <td><a href="student-profile.html" class="student-link">Arjun Deka</a></td>
+                                <td>9-C</td>
+                                <td>₹5,500</td>
+                                <td>2026-08-15</td>
+                                <td>20</td>
+                                <td><span class="status-badge overdue">Overdue</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="collect-fee.html" class="action-btn edit" title="Collect Fee">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <line x1="12" y1="8" x2="12" y2="16" />
+                                                <line x1="8" y1="12" x2="16" y2="12" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn send-reminder-btn" title="Send Reminder">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ========== PAGINATION ========== -->
+                <div class="table-footer">
+                    <div class="table-info">
+                        <span>Showing <strong>1</strong> to <strong>3</strong> of <strong>3</strong> due records</span>
+                    </div>
+                    <div class="pagination">
+                        <button class="page-btn" disabled>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6" />
+                            </svg>
+                        </button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn" disabled>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ========== BULK ACTION WARNING ========== -->
+                <div class="bulk-warning">
+                    <span class="warning-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                    </span>
+                    <span class="warning-text">
+                        <strong>Note:</strong> Students with overdue fees (30+ days) will be flagged for review. Send reminders to notify parents about pending payments.
+                    </span>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ========== FOOTER ========== -->
+        <footer class="site-footer site-footer--app">
+            <div class="footer-inner">
+                <p class="footer-copy">
+                    &copy; 2026 Janaki Professional Academy. All rights reserved.
+                </p>
+                <p class="footer-powered">
+                    School Management ERP v1.0 &bull; Phase 1 Frontend
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ========== EXTERNAL JAVASCRIPT ========== -->
+    <script src="js/script.js"></script>
+    <script src="js/toggle.js"></script>
+    <script src="js/fees.js"></script>
+    <script src="js/export.js"></script>
+</body>
+</html>

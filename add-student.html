@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Student – Janaki Professional Academy ERP</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/root.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/students.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+</head>
+<body>
+
+    <!-- ========== APP WRAPPER ========== -->
+    <div class="app-wrapper">
+
+        <!-- ========== HEADER ========== -->
+        <header class="app-header" id="appHeader">
+            <div class="header-inner">
+                <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+
+                <div class="header-brand">
+                    <a href="dashboard.html" class="brand-link">
+                        <span class="brand-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                                <path d="M2 17l10 5 10-5" />
+                                <path d="M2 12l10 5 10-5" />
+                            </svg>
+                        </span>
+                        <span class="brand-name">Janaki Professional Academy</span>
+                    </a>
+                </div>
+
+                <div class="header-session">
+                    <span class="session-label">Academic Session:</span>
+                    <span class="session-value" id="academicSession">2026-2027</span>
+                </div>
+
+                <div class="header-user">
+                    <div class="user-profile">
+                        <span class="user-avatar">A</span>
+                        <span class="user-name" id="userName">Admin</span>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn" aria-label="Logout">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        <span class="logout-text">Logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- ========== SIDEBAR + MAIN CONTENT ========== -->
+        <div class="app-body">
+
+            <!-- ========== SIDEBAR ========== -->
+            <nav class="sidebar" id="sidebar">
+                <div class="sidebar-inner">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="7" height="7" />
+                                        <rect x="14" y="3" width="7" height="7" />
+                                        <rect x="14" y="14" width="7" height="7" />
+                                        <rect x="3" y="14" width="7" height="7" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item active nav-parent">
+                            <a href="#students-sub" class="nav-link nav-toggle open" data-target="students-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Students</span>
+                                <span class="nav-arrow open">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub open" id="students-sub">
+                                <li><a href="students.html">All Students</a></li>
+                                <li><a href="add-student.html" class="active">Add Student</a></li>
+                                <li><a href="student-admission.html">Admissions</a></li>
+                                <li><a href="student-promotion.html">Promotion</a></li>
+                                <li><a href="student-transfer.html">Transfer</a></li>
+                                <li><a href="student-id-card.html">ID Cards</a></li>
+                                <li><a href="student-documents.html">Documents</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#teachers-sub" class="nav-link nav-toggle" data-target="teachers-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 20v-6M8 20V8a4 4 0 0 1 8 0v12" />
+                                        <circle cx="12" cy="4" r="2" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Teachers & Staff</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="teachers-sub">
+                                <li><a href="teachers.html">All Teachers</a></li>
+                                <li><a href="add-teacher.html">Add Teacher</a></li>
+                                <li><a href="teacher-profile.html">Teacher Profile</a></li>
+                                <li><a href="staff.html">All Staff</a></li>
+                                <li><a href="staff-profile.html">Staff Profile</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#fees-sub" class="nav-link nav-toggle" data-target="fees-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="8" x2="12" y2="16" />
+                                        <line x1="8" y1="12" x2="16" y2="12" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Fee Management</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="fees-sub">
+                                <li><a href="fees.html">All Fees</a></li>
+                                <li><a href="fee-structure.html">Fee Structure</a></li>
+                                <li><a href="collect-fee.html">Collect Fee</a></li>
+                                <li><a href="fee-history.html">Fee History</a></li>
+                                <li><a href="fee-due.html">Fee Due</a></li>
+                                <li><a href="fee-receipt.html">Fee Receipt</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#salary-sub" class="nav-link nav-toggle" data-target="salary-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 2v4M12 22v-4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M22 12h-4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Salary Management</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="salary-sub">
+                                <li><a href="salary.html">All Salaries</a></li>
+                                <li><a href="salary-structure.html">Salary Structure</a></li>
+                                <li><a href="salary-payment.html">Make Payment</a></li>
+                                <li><a href="salary-history.html">Salary History</a></li>
+                                <li><a href="salary-slip.html">Salary Slip</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#attendance-sub" class="nav-link nav-toggle" data-target="attendance-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Attendance</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="attendance-sub">
+                                <li><a href="attendance.html">Dashboard</a></li>
+                                <li><a href="student-attendance.html">Student Attendance</a></li>
+                                <li><a href="staff-attendance.html">Staff Attendance</a></li>
+                                <li><a href="attendance-report.html">Attendance Report</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#academic-sub" class="nav-link nav-toggle" data-target="academic-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Academic</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="academic-sub">
+                                <li><a href="classes.html">Classes</a></li>
+                                <li><a href="sections.html">Sections</a></li>
+                                <li><a href="subjects.html">Subjects</a></li>
+                                <li><a href="academic-session.html">Academic Session</a></li>
+                                <li><a href="timetable.html">Timetable</a></li>
+                                <li><a href="examinations.html">Examinations</a></li>
+                                <li><a href="results.html">Results</a></li>
+                                <li><a href="report-card.html">Report Cards</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#comm-sub" class="nav-link nav-toggle" data-target="comm-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Communication</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="comm-sub">
+                                <li><a href="notices.html">Notices</a></li>
+                                <li><a href="events.html">Events</a></li>
+                                <li><a href="announcements.html">Announcements</a></li>
+                                <li><a href="calendar.html">Calendar</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#reports-sub" class="nav-link nav-toggle" data-target="reports-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
+                                        <path d="M3 18h18v-4H3z" />
+                                        <path d="M7 18v4" />
+                                        <path d="M17 18v4" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Reports</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="reports-sub">
+                                <li><a href="reports.html">All Reports</a></li>
+                                <li><a href="student-reports.html">Student Reports</a></li>
+                                <li><a href="fee-reports.html">Fee Reports</a></li>
+                                <li><a href="salary-reports.html">Salary Reports</a></li>
+                                <li><a href="attendance-reports.html">Attendance Reports</a></li>
+                                <li><a href="academic-reports.html">Academic Reports</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#docs-sub" class="nav-link nav-toggle" data-target="docs-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="16" y1="13" x2="8" y2="13" />
+                                        <line x1="16" y1="17" x2="8" y2="17" />
+                                        <polyline points="10 9 9 9 8 9" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Receipts & Docs</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="docs-sub">
+                                <li><a href="receipts.html">All Receipts</a></li>
+                                <li><a href="receipt-view.html">View Receipt</a></li>
+                                <li><a href="certificate.html">Certificates</a></li>
+                                <li><a href="document-generator.html">Document Generator</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#admin-sub" class="nav-link nav-toggle" data-target="admin-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="3" />
+                                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Admin</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="admin-sub">
+                                <li><a href="users.html">Users</a></li>
+                                <li><a href="roles.html">Roles</a></li>
+                                <li><a href="permissions.html">Permissions</a></li>
+                                <li><a href="admin-settings.html">Admin Settings</a></li>
+                                <li><a href="profile.html">My Profile</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- ========== MAIN CONTENT ========== -->
+            <main class="main-content">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <a href="students.html" class="back-link">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12" />
+                                <polyline points="12 19 5 12 12 5" />
+                            </svg>
+                            Back to Students
+                        </a>
+                        <h1 class="page-title">Add New Student</h1>
+                    </div>
+                    <div class="page-actions">
+                        <span class="form-hint">Fields marked with * are required</span>
+                    </div>
+                </div>
+
+                <!-- ========== ADD STUDENT FORM ========== -->
+                <form id="addStudentForm" class="form-container" novalidate>
+
+                    <!-- ====== SECTION: Personal Information ====== -->
+                    <section class="form-section">
+                        <h2 class="section-title">Personal Information</h2>
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="firstName" class="form-label required">First Name</label>
+                                <input type="text" id="firstName" class="form-input" placeholder="Enter first name" required />
+                                <span class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="middleName" class="form-label">Middle Name</label>
+                                <input type="text" id="middleName" class="form-input" placeholder="Enter middle name" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lastName" class="form-label required">Last Name</label>
+                                <input type="text" id="lastName" class="form-input" placeholder="Enter last name" required />
+                                <span class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dob" class="form-label required">Date of Birth</label>
+                                <input type="date" id="dob" class="form-input" required />
+                                <span class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gender" class="form-label required">Gender</label>
+                                <select id="gender" class="form-input" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <span class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bloodGroup" class="form-label">Blood Group</label>
+                                <select id="bloodGroup" class="form-input">
+                                    <option value="">Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nationality" class="form-label">Nationality</label>
+                                <input type="text" id="nationality" class="form-input" placeholder="Enter nationality" value="Indian" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="religion" class="form-label">Religion</label>
+                                <input type="text" id="religion" class="form-input" placeholder="Enter religion" />
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="address" class="form-label required">Permanent Address</label>
+                                <textarea id="address" class="form-input" rows="3" placeholder="Enter complete address" required></textarea>
+                                <span class="form-error"></span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ====== SECTION: Parent / Guardian Information ====== -->
+                    <section class="form-section">
+                        <h2 class="section-title">Parent / Guardian Information</h2>
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="fatherName" class="form-label required">Father's Name</label>
+                                <input type="text" id="fatherName" class="form-input" placeholder="Enter father's name" required />
+                                <span class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fatherOccupation" class="form-label">Father's Occupation</label>
+                                <input type="text" id="fatherOccupation" class="form-input" placeholder="Enter occupation" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="motherName" class="form-label required">Mother's Name</label>
+                                <input type="text" id="motherName" class="form-input" placeholder="Enter mother's name" required />
+                                <span class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="motherOccupation" class="form-label">Mother's Occupation</label>
+                                <input type="text" id="motherOccupation" class="form-input" placeholder="Enter occupation" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="guardianName" class="form-label">Guardian Name (if different)</label>
+                                <input type="text" id="guardianName" class="form-input" placeholder="Enter guardian name" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="guardianRelation" class="form-label">Guardian Relation</label>
+                                <input type="text" id="guardianRelation" class="form-input" placeholder="e.g., Uncle, Aunt" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="parentContact" class="form-label required">Contact Number</label>
+                                <input type="tel" id="parentContact" class="form-input" placeholder="10-digit mobile number" required />
+                                <span class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="parentEmail" class="form-label">Email Address</label>
+                                <input type="email" id="parentEmail" class="form-input" placeholder="Enter email address" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ====== SECTION: Academic Information ====== -->
+                    <section class="form-section">
+                        <h2 class="section-title">Academic Information</h2>
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="admissionClass" class="form-label required">Class</label>
+                                <select id="admissionClass" class="form-input" required>
+                                    <option value="">Select Class</option>
+                                    <option value="1">Class 1</option>
+                                    <option value="2">Class 2</option>
+                                    <option value="3">Class 3</option>
+                                    <option value="4">Class 4</option>
+                                    <option value="5">Class 5</option>
+                                    <option value="6">Class 6</option>
+                                    <option value="7">Class 7</option>
+                                    <option value="8">Class 8</option>
+                                    <option value="9">Class 9</option>
+                                    <option value="10">Class 10</option>
+                                    <option value="11">Class 11</option>
+                                    <option value="12">Class 12</option>
+                                </select>
+                                <span class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="admissionSection" class="form-label required">Section</label>
+                                <select id="admissionSection" class="form-input" required>
+                                    <option value="">Select Section</option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                </select>
+                                <span class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rollNumber" class="form-label">Roll Number</label>
+                                <input type="text" id="rollNumber" class="form-input" placeholder="Assign roll number" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="admissionSession" class="form-label required">Academic Session</label>
+                                <select id="admissionSession" class="form-input" required>
+                                    <option value="2026-2027" selected>2026-2027</option>
+                                    <option value="2025-2026">2025-2026</option>
+                                    <option value="2024-2025">2024-2025</option>
+                                </select>
+                                <span class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="admissionDate" class="form-label required">Admission Date</label>
+                                <input type="date" id="admissionDate" class="form-input" required />
+                                <span class="form-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medium" class="form-label">Medium of Instruction</label>
+                                <select id="medium" class="form-input">
+                                    <option value="English" selected>English</option>
+                                    <option value="Assamese">Assamese</option>
+                                    <option value="Hindi">Hindi</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="studentHouse" class="form-label">House</label>
+                                <select id="studentHouse" class="form-input">
+                                    <option value="">Select House</option>
+                                    <option value="Blue">Blue</option>
+                                    <option value="Green">Green</option>
+                                    <option value="Red">Red</option>
+                                    <option value="Yellow">Yellow</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="previousSchool" class="form-label">Previous School (if any)</label>
+                                <input type="text" id="previousSchool" class="form-input" placeholder="Enter previous school name" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ====== SECTION: Additional Information ====== -->
+                    <section class="form-section">
+                        <h2 class="section-title">Additional Information</h2>
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="studentStatus" class="form-label">Status</label>
+                                <select id="studentStatus" class="form-input">
+                                    <option value="active" selected>Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="transport" class="form-label">Transport Required</label>
+                                <select id="transport" class="form-input">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="hostel" class="form-label">Hostel Required</label>
+                                <select id="hostel" class="form-input">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medicalInfo" class="form-label">Medical Information (if any)</label>
+                                <textarea id="medicalInfo" class="form-input" rows="2" placeholder="Any allergies, conditions, or special medical needs"></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="remarks" class="form-label">Remarks</label>
+                                <textarea id="remarks" class="form-input" rows="2" placeholder="Any additional remarks"></textarea>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ====== FORM ACTIONS ====== -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" id="cancelBtn" onclick="window.location.href='students.html'">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <span class="btn-text">Add Student</span>
+                            <span class="btn-spinner hidden">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="spinner">
+                                    <line x1="12" y1="2" x2="12" y2="6" />
+                                    <line x1="12" y1="18" x2="12" y2="22" />
+                                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
+                                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
+                                    <line x1="2" y1="12" x2="6" y2="12" />
+                                    <line x1="18" y1="12" x2="22" y2="12" />
+                                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
+                                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- ====== SUCCESS MESSAGE ====== -->
+                    <div id="formSuccess" class="form-success hidden">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                        <div>
+                            <h3>Student Added Successfully!</h3>
+                            <p>Admission Number: <strong id="generatedAdmissionNo">JPA-2026-011</strong> has been generated.</p>
+                            <div class="success-actions">
+                                <a href="student-profile.html" class="btn btn-primary btn-sm">View Profile</a>
+                                <a href="add-student.html" class="btn btn-outline btn-sm">Add Another</a>
+                                <a href="students.html" class="btn btn-outline btn-sm">Back to List</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </main>
+        </div>
+
+        <!-- ========== FOOTER ========== -->
+        <footer class="site-footer site-footer--app">
+            <div class="footer-inner">
+                <p class="footer-copy">
+                    &copy; 2026 Janaki Professional Academy. All rights reserved.
+                </p>
+                <p class="footer-powered">
+                    School Management ERP v1.0 &bull; Phase 1 Frontend
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ========== EXTERNAL JAVASCRIPT ========== -->
+    <script src="js/script.js"></script>
+    <script src="js/toggle.js"></script>
+    <script src="js/students.js"></script>
+</body>
+</html>

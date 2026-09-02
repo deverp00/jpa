@@ -3,802 +3,830 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ERP · Students 360°</title>
+    <title>Students – Janaki Professional Academy ERP</title>
 
+    <!-- External CSS -->
     <link rel="stylesheet" href="css/root.css" />
     <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/students.css" />
     <link rel="stylesheet" href="css/footer.css" />
-
-    <style>
-        .dashboard-main {
-            display: flex;
-            flex: 1;
-            position: relative;
-        }
-
-        /* Sidebar – desktop */
-        .sidebar {
-            width: 240px;
-            background: var(--sidebar-bg);
-            color: var(--sidebar-text);
-            padding: 24px 12px;
-            min-height: calc(100vh - 70px - 80px);
-            position: sticky;
-            top: 70px;
-            height: calc(100vh - 70px - 80px);
-            overflow-y: auto;
-            flex-shrink: 0;
-            border-right: var(--border);
-            transition: transform 0.3s ease;
-            z-index: 100;
-        }
-        .sidebar nav {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            border-radius: var(--border-radius);
-            color: var(--sidebar-text);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            transition: background 0.2s;
-        }
-        .sidebar a:hover {
-            background: #1e314a;
-            color: white;
-        }
-        .sidebar a.active {
-            background: #1e3a5f;
-            color: white;
-            border-left: 3px solid var(--primary);
-        }
-        .sidebar a svg {
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-            fill: currentColor;
-        }
-        .sidebar .sidebar-bottom {
-            margin-top: auto;
-            border-top: 1px solid #1e314a;
-            padding-top: 16px;
-            margin-top: 24px;
-        }
-
-        /* Sidebar overlay */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.4);
-            z-index: 99;
-        }
-        .sidebar-overlay.active {
-            display: block;
-        }
-
-        .content {
-            flex: 1;
-            padding: 24px 32px;
-            overflow-x: auto;
-        }
-
-        /* Hamburger button */
-        .hamburger {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px 8px;
-            margin-right: 8px;
-        }
-        .hamburger svg {
-            width: 26px;
-            height: 26px;
-            fill: var(--text-main);
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .page-header h1 {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-        .page-header h1 span {
-            font-weight: 400;
-            color: var(--text-muted);
-            font-size: 16px;
-            margin-left: 8px;
-        }
-        .header-actions {
-            display: flex;
-            gap: 12px;
-        }
-        .btn {
-            padding: 8px 16px;
-            border-radius: var(--border-radius);
-            border: var(--border);
-            background: var(--card-bg);
-            color: var(--text-main);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.15s;
-        }
-        .btn svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        .filters-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 20px;
-            padding: 16px;
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            border: var(--border);
-        }
-        .filters-bar select,
-        .filters-bar input {
-            padding: 8px 12px;
-            border-radius: var(--border-radius);
-            border: var(--border);
-            background: var(--light-bg);
-            font-size: 13px;
-            color: var(--text-main);
-            min-width: 140px;
-        }
-        .filters-bar select:focus,
-        .filters-bar input:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-        .filters-bar .search-input {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--light-bg);
-            border-radius: var(--border-radius);
-            border: var(--border);
-            padding: 0 12px;
-        }
-        .filters-bar .search-input svg {
-            width: 16px;
-            height: 16px;
-            fill: var(--secondary);
-        }
-        .filters-bar .search-input input {
-            border: none;
-            background: transparent;
-            outline: none;
-            padding: 8px 0;
-            font-size: 13px;
-            width: 180px;
-        }
-
-        .students-layout {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 24px;
-        }
-        @media (max-width: 1024px) {
-            .students-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .table-container {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            border: var(--border);
-            overflow: hidden;
-        }
-        .table-scroll {
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-        table th {
-            text-align: left;
-            padding: 12px 16px;
-            background: var(--light-bg);
-            font-weight: 600;
-            color: var(--text-muted);
-            border-bottom: var(--border);
-            white-space: nowrap;
-        }
-        table td {
-            padding: 12px 16px;
-            border-bottom: 1px solid #edf2f7;
-            cursor: pointer;
-            transition: background 0.1s;
-        }
-        table tr:hover td {
-            background: #f8fafc;
-        }
-        table tr:last-child td {
-            border-bottom: none;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            background: #e6f7ed;
-            color: #16a34a;
-        }
-        .status-badge.inactive {
-            background: #fce4ec;
-            color: #dc2626;
-        }
-        .status-badge.pending {
-            background: #fef9e7;
-            color: #d97706;
-        }
-
-        .profile-panel {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            border: var(--border);
-            padding: 0;
-            overflow: hidden;
-        }
-        .profile-header {
-            padding: 20px 24px;
-            background: var(--light-bg);
-            border-bottom: var(--border);
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .profile-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-        .profile-name h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-        .profile-name p {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .profile-tabs {
-            display: flex;
-            gap: 4px;
-            padding: 0 24px;
-            border-bottom: var(--border);
-            background: var(--card-bg);
-            overflow-x: auto;
-        }
-        .profile-tabs button {
-            padding: 12px 16px;
-            background: none;
-            border: none;
-            border-bottom: 2px solid transparent;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: 0.15s;
-            white-space: nowrap;
-        }
-        .profile-tabs button.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-        }
-        .profile-tabs button:hover {
-            color: var(--text-main);
-        }
-
-        .profile-content {
-            padding: 20px 24px;
-            min-height: 200px;
-        }
-        .tab-panel {
-            display: none;
-        }
-        .tab-panel.active {
-            display: block;
-        }
-        .tab-panel .info-row {
-            display: flex;
-            padding: 8px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .tab-panel .info-row .label {
-            width: 140px;
-            font-weight: 500;
-            color: var(--text-muted);
-            flex-shrink: 0;
-        }
-        .tab-panel .info-row .value {
-            color: var(--text-main);
-        }
-
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-                align-items: center;
-            }
-            .sidebar {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                bottom: 0;
-                width: 260px;
-                transform: translateX(-100%);
-                height: calc(100vh - 70px);
-                border-right: var(--border);
-                z-index: 100;
-                background: var(--sidebar-bg);
-                box-shadow: 2px 0 12px rgba(0,0,0,0.1);
-            }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            .sidebar-overlay.active {
-                display: block;
-            }
-            .content {
-                padding: 16px;
-            }
-            .filters-bar {
-                flex-direction: column;
-            }
-            .filters-bar .search-input input {
-                width: 100%;
-            }
-            .profile-header {
-                flex-wrap: wrap;
-            }
-            .profile-tabs {
-                padding: 0 12px;
-            }
-            .students-layout {
-                gap: 16px;
-            }
-        }
-        @media (max-width: 480px) {
-            .header-center .search-box {
-                width: 100%;
-            }
-            .header-center .search-box input {
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 <body>
-    <header class="app-header">
-        <div class="header-left">
-            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <line x1="3" y1="12" x2="21" y2="12" />
-                    <line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-            </button>
-            <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="7" height="7" rx="1" />
-                <rect x="14" y="3" width="7" height="7" rx="1" />
-                <rect x="3" y="14" width="7" height="7" rx="1" />
-                <rect x="14" y="14" width="7" height="7" rx="1" />
-            </svg>
-            <span class="logo-text">ERP·Nexus</span>
-        </div>
-        <div class="header-center">
-            <div class="search-box">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-                <input type="text" placeholder="Search students, teachers..." />
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="notif-bell">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                </svg>
-                <span class="badge">3</span>
-            </div>
-            <div class="user-avatar">JD</div>
-        </div>
-    </header>
 
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <!-- ========== APP WRAPPER ========== -->
+    <div class="app-wrapper">
 
-    <main class="dashboard-main">
-        <aside class="sidebar" id="sidebar">
-            <nav>
-                <a href="dashboard.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="7" height="7" rx="1" />
-                        <rect x="14" y="3" width="7" height="7" rx="1" />
-                        <rect x="3" y="14" width="7" height="7" rx="1" />
-                        <rect x="14" y="14" width="7" height="7" rx="1" />
-                    </svg>
-                    <span>Dashboard</span>
-                </a>
-                <a href="#" class="active">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                    <span>Students 360°</span>
-                </a>
-                <a href="teachers.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                    </svg>
-                    <span>Teachers 360°</span>
-                </a>
-                <a href="fees.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                    </svg>
-                    <span>Fees</span>
-                </a>
-                <a href="admissions.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-                        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
-                    </svg>
-                    <span>Admissions</span>
-                </a>
-                <a href="payroll.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                    </svg>
-                    <span>Payroll</span>
-                </a>
-                <a href="reports.html">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
-                        <circle cx="12" cy="16" r="5" />
-                        <path d="M12 11v5" />
-                        <path d="M9 13l3 3 3-3" />
-                    </svg>
-                    <span>Reports</span>
-                </a>
-                <div class="sidebar-bottom">
-                    <a href="settings.html">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="3" />
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l2.5 2.5a1.65 1.65 0 0 0 1.18.5h6.44a1.65 1.65 0 0 0 1.18-.5l2.5-2.5z" />
-                        </svg>
-                        <span>Settings</span>
+        <!-- ========== HEADER ========== -->
+        <header class="app-header" id="appHeader">
+            <div class="header-inner">
+                <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+
+                <div class="header-brand">
+                    <a href="dashboard.html" class="brand-link">
+                        <span class="brand-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                                <path d="M2 17l10 5 10-5" />
+                                <path d="M2 12l10 5 10-5" />
+                            </svg>
+                        </span>
+                        <span class="brand-name">Janaki Professional Academy</span>
                     </a>
-                    <a href="#">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                </div>
+
+                <div class="header-session">
+                    <span class="session-label">Academic Session:</span>
+                    <span class="session-value" id="academicSession">2026-2027</span>
+                </div>
+
+                <div class="header-user">
+                    <div class="user-profile">
+                        <span class="user-avatar">A</span>
+                        <span class="user-name" id="userName">Admin</span>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn" aria-label="Logout">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                             <polyline points="16 17 21 12 16 7" />
                             <line x1="21" y1="12" x2="9" y2="12" />
                         </svg>
-                        <span>Logout</span>
-                    </a>
+                        <span class="logout-text">Logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- ========== SIDEBAR + MAIN CONTENT ========== -->
+        <div class="app-body">
+
+            <!-- ========== SIDEBAR ========== -->
+            <nav class="sidebar" id="sidebar">
+                <div class="sidebar-inner">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="7" height="7" />
+                                        <rect x="14" y="3" width="7" height="7" />
+                                        <rect x="14" y="14" width="7" height="7" />
+                                        <rect x="3" y="14" width="7" height="7" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item active nav-parent">
+                            <a href="#students-sub" class="nav-link nav-toggle open" data-target="students-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Students</span>
+                                <span class="nav-arrow open">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub open" id="students-sub">
+                                <li><a href="students.html" class="active">All Students</a></li>
+                                <li><a href="add-student.html">Add Student</a></li>
+                                <li><a href="student-admission.html">Admissions</a></li>
+                                <li><a href="student-promotion.html">Promotion</a></li>
+                                <li><a href="student-transfer.html">Transfer</a></li>
+                                <li><a href="student-id-card.html">ID Cards</a></li>
+                                <li><a href="student-documents.html">Documents</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#teachers-sub" class="nav-link nav-toggle" data-target="teachers-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 20v-6M8 20V8a4 4 0 0 1 8 0v12" />
+                                        <circle cx="12" cy="4" r="2" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Teachers & Staff</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="teachers-sub">
+                                <li><a href="teachers.html">All Teachers</a></li>
+                                <li><a href="add-teacher.html">Add Teacher</a></li>
+                                <li><a href="teacher-profile.html">Teacher Profile</a></li>
+                                <li><a href="staff.html">All Staff</a></li>
+                                <li><a href="staff-profile.html">Staff Profile</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#fees-sub" class="nav-link nav-toggle" data-target="fees-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="8" x2="12" y2="16" />
+                                        <line x1="8" y1="12" x2="16" y2="12" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Fee Management</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="fees-sub">
+                                <li><a href="fees.html">All Fees</a></li>
+                                <li><a href="fee-structure.html">Fee Structure</a></li>
+                                <li><a href="collect-fee.html">Collect Fee</a></li>
+                                <li><a href="fee-history.html">Fee History</a></li>
+                                <li><a href="fee-due.html">Fee Due</a></li>
+                                <li><a href="fee-receipt.html">Fee Receipt</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#salary-sub" class="nav-link nav-toggle" data-target="salary-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 2v4M12 22v-4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M22 12h-4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Salary Management</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="salary-sub">
+                                <li><a href="salary.html">All Salaries</a></li>
+                                <li><a href="salary-structure.html">Salary Structure</a></li>
+                                <li><a href="salary-payment.html">Make Payment</a></li>
+                                <li><a href="salary-history.html">Salary History</a></li>
+                                <li><a href="salary-slip.html">Salary Slip</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#attendance-sub" class="nav-link nav-toggle" data-target="attendance-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Attendance</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="attendance-sub">
+                                <li><a href="attendance.html">Dashboard</a></li>
+                                <li><a href="student-attendance.html">Student Attendance</a></li>
+                                <li><a href="staff-attendance.html">Staff Attendance</a></li>
+                                <li><a href="attendance-report.html">Attendance Report</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#academic-sub" class="nav-link nav-toggle" data-target="academic-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Academic</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="academic-sub">
+                                <li><a href="classes.html">Classes</a></li>
+                                <li><a href="sections.html">Sections</a></li>
+                                <li><a href="subjects.html">Subjects</a></li>
+                                <li><a href="academic-session.html">Academic Session</a></li>
+                                <li><a href="timetable.html">Timetable</a></li>
+                                <li><a href="examinations.html">Examinations</a></li>
+                                <li><a href="results.html">Results</a></li>
+                                <li><a href="report-card.html">Report Cards</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#comm-sub" class="nav-link nav-toggle" data-target="comm-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Communication</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="comm-sub">
+                                <li><a href="notices.html">Notices</a></li>
+                                <li><a href="events.html">Events</a></li>
+                                <li><a href="announcements.html">Announcements</a></li>
+                                <li><a href="calendar.html">Calendar</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#reports-sub" class="nav-link nav-toggle" data-target="reports-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2" />
+                                        <path d="M3 18h18v-4H3z" />
+                                        <path d="M7 18v4" />
+                                        <path d="M17 18v4" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Reports</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="reports-sub">
+                                <li><a href="reports.html">All Reports</a></li>
+                                <li><a href="student-reports.html">Student Reports</a></li>
+                                <li><a href="fee-reports.html">Fee Reports</a></li>
+                                <li><a href="salary-reports.html">Salary Reports</a></li>
+                                <li><a href="attendance-reports.html">Attendance Reports</a></li>
+                                <li><a href="academic-reports.html">Academic Reports</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#docs-sub" class="nav-link nav-toggle" data-target="docs-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="16" y1="13" x2="8" y2="13" />
+                                        <line x1="16" y1="17" x2="8" y2="17" />
+                                        <polyline points="10 9 9 9 8 9" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Receipts & Docs</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="docs-sub">
+                                <li><a href="receipts.html">All Receipts</a></li>
+                                <li><a href="receipt-view.html">View Receipt</a></li>
+                                <li><a href="certificate.html">Certificates</a></li>
+                                <li><a href="document-generator.html">Document Generator</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-parent">
+                            <a href="#admin-sub" class="nav-link nav-toggle" data-target="admin-sub">
+                                <span class="nav-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="3" />
+                                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                                    </svg>
+                                </span>
+                                <span class="nav-label">Admin</span>
+                                <span class="nav-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <ul class="nav-sub" id="admin-sub">
+                                <li><a href="users.html">Users</a></li>
+                                <li><a href="roles.html">Roles</a></li>
+                                <li><a href="permissions.html">Permissions</a></li>
+                                <li><a href="admin-settings.html">Admin Settings</a></li>
+                                <li><a href="profile.html">My Profile</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </nav>
-        </aside>
 
-        <section class="content">
-            <div class="page-header">
-                <h1>Students 360° <span>· manage all student records</span></h1>
-                <div class="header-actions">
-                    <button class="btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                            <polyline points="17 6 23 6 23 12" />
-                        </svg>
-                        Export
-                    </button>
-                    <button class="btn btn-primary">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                        Add Student
-                    </button>
-                </div>
-            </div>
+            <!-- ========== MAIN CONTENT ========== -->
+            <main class="main-content">
 
-            <div class="filters-bar">
-                <select>
-                    <option>All Classes</option>
-                    <option>Class 8</option>
-                    <option>Class 9</option>
-                    <option>Class 10</option>
-                </select>
-                <select>
-                    <option>All Sections</option>
-                    <option>A</option>
-                    <option>B</option>
-                    <option>C</option>
-                </select>
-                <select>
-                    <option>All Status</option>
-                    <option>Active</option>
-                    <option>Inactive</option>
-                    <option>Pending</option>
-                </select>
-                <select>
-                    <option>Fee Status</option>
-                    <option>Paid</option>
-                    <option>Pending</option>
-                    <option>Overdue</option>
-                </select>
-                <div class="search-input">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8" />
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                    </svg>
-                    <input type="text" placeholder="Search by name or ID..." />
-                </div>
-            </div>
-
-            <div class="students-layout">
-                <div class="table-container">
-                    <div class="table-scroll">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Student ID</th>
-                                    <th>Name</th>
-                                    <th>Class</th>
-                                    <th>Section</th>
-                                    <th>Status</th>
-                                    <th>Fee</th>
-                                </tr>
-                            </thead>
-                            <tbody id="studentTableBody">
-                                <tr data-id="STU-2026-001">
-                                    <td>STU-2026-001</td>
-                                    <td>Riya Sharma</td>
-                                    <td>10</td>
-                                    <td>A</td>
-                                    <td><span class="status-badge">Active</span></td>
-                                    <td><span style="color:var(--success);">Paid</span></td>
-                                </tr>
-                                <tr data-id="STU-2026-002">
-                                    <td>STU-2026-002</td>
-                                    <td>Aarav Verma</td>
-                                    <td>8</td>
-                                    <td>B</td>
-                                    <td><span class="status-badge">Active</span></td>
-                                    <td><span style="color:var(--danger);">Overdue</span></td>
-                                </tr>
-                                <tr data-id="STU-2026-003">
-                                    <td>STU-2026-003</td>
-                                    <td>Kunal Singh</td>
-                                    <td>9</td>
-                                    <td>A</td>
-                                    <td><span class="status-badge inactive">Inactive</span></td>
-                                    <td><span style="color:var(--warning);">Pending</span></td>
-                                </tr>
-                                <tr data-id="STU-2026-004">
-                                    <td>STU-2026-004</td>
-                                    <td>Priya Patel</td>
-                                    <td>10</td>
-                                    <td>C</td>
-                                    <td><span class="status-badge pending">Pending</span></td>
-                                    <td><span style="color:var(--text-muted);">N/A</span></td>
-                                </tr>
-                                <tr data-id="STU-2026-005">
-                                    <td>STU-2026-005</td>
-                                    <td>Rohit Gupta</td>
-                                    <td>8</td>
-                                    <td>A</td>
-                                    <td><span class="status-badge">Active</span></td>
-                                    <td><span style="color:var(--success);">Paid</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Student Management</h1>
+                    <div class="page-actions">
+                        <a href="add-student.html" class="btn btn-primary">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            Add Student
+                        </a>
                     </div>
                 </div>
 
-                <div class="profile-panel" id="profilePanel">
-                    <div class="profile-header">
-                        <div class="profile-avatar">RS</div>
-                        <div class="profile-name">
-                            <h3 id="profileName">Riya Sharma</h3>
-                            <p id="profileId">STU-2026-001 · Class 10-A</p>
+                <!-- ========== TOOLBAR ========== -->
+                <div class="data-toolbar">
+                    <div class="toolbar-left">
+                        <div class="search-wrapper">
+                            <span class="search-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                </svg>
+                            </span>
+                            <input type="text" class="search-input" id="studentSearch" placeholder="Search by name, admission no, or class..." />
                         </div>
                     </div>
-
-                    <div class="profile-tabs">
-                        <button class="active" data-tab="personal">Personal</button>
-                        <button data-tab="parents">Parents</button>
-                        <button data-tab="attendance">Attendance</button>
-                        <button data-tab="fees">Fees</button>
-                        <button data-tab="documents">Documents</button>
-                    </div>
-
-                    <div class="profile-content">
-                        <div class="tab-panel active" id="tab-personal">
-                            <div class="info-row"><span class="label">Full Name</span><span class="value">Riya Sharma</span></div>
-                            <div class="info-row"><span class="label">Date of Birth</span><span class="value">15 May 2008</span></div>
-                            <div class="info-row"><span class="label">Gender</span><span class="value">Female</span></div>
-                            <div class="info-row"><span class="label">Class</span><span class="value">10</span></div>
-                            <div class="info-row"><span class="label">Section</span><span class="value">A</span></div>
-                            <div class="info-row"><span class="label">Admission Date</span><span class="value">01 Jun 2025</span></div>
-                            <div class="info-row"><span class="label">Status</span><span class="value"><span class="status-badge">Active</span></span></div>
+                    <div class="toolbar-right">
+                        <div class="filter-group">
+                            <select class="filter-select" id="classFilter">
+                                <option value="">All Classes</option>
+                                <option value="1">Class 1</option>
+                                <option value="2">Class 2</option>
+                                <option value="3">Class 3</option>
+                                <option value="4">Class 4</option>
+                                <option value="5">Class 5</option>
+                                <option value="6">Class 6</option>
+                                <option value="7">Class 7</option>
+                                <option value="8">Class 8</option>
+                                <option value="9">Class 9</option>
+                                <option value="10">Class 10</option>
+                                <option value="11">Class 11</option>
+                                <option value="12">Class 12</option>
+                            </select>
+                            <select class="filter-select" id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="transferred">Transferred</option>
+                                <option value="graduated">Graduated</option>
+                            </select>
                         </div>
-                        <div class="tab-panel" id="tab-parents">
-                            <div class="info-row"><span class="label">Father's Name</span><span class="value">Mr. Rajesh Sharma</span></div>
-                            <div class="info-row"><span class="label">Mother's Name</span><span class="value">Mrs. Sunita Sharma</span></div>
-                            <div class="info-row"><span class="label">Guardian</span><span class="value">Mr. Rajesh Sharma</span></div>
-                            <div class="info-row"><span class="label">Contact</span><span class="value">+91 98765 43210</span></div>
-                            <div class="info-row"><span class="label">Email</span><span class="value">rajesh.sharma@email.com</span></div>
-                            <div class="info-row"><span class="label">Address</span><span class="value">123, Green Park, New Delhi</span></div>
-                        </div>
-                        <div class="tab-panel" id="tab-attendance">
-                            <div class="info-row"><span class="label">This Month</span><span class="value">Present: 18 / 22 (81.8%)</span></div>
-                            <div class="info-row"><span class="label">Last Month</span><span class="value">Present: 20 / 24 (83.3%)</span></div>
-                            <div class="info-row"><span class="label">Overall (2025-26)</span><span class="value">Present: 142 / 180 (78.9%)</span></div>
-                            <div class="info-row"><span class="label">Last Absent</span><span class="value">02 Sep 2026</span></div>
-                            <div style="margin-top:12px;padding:12px;background:var(--light-bg);border-radius:var(--border-radius);">
-                                <span style="font-size:13px;color:var(--text-muted);">Attendance trend available in Reports</span>
-                            </div>
-                        </div>
-                        <div class="tab-panel" id="tab-fees">
-                            <div class="info-row"><span class="label">Total Fee</span><span class="value">₹45,000</span></div>
-                            <div class="info-row"><span class="label">Paid</span><span class="value">₹45,000</span></div>
-                            <div class="info-row"><span class="label">Pending</span><span class="value">₹0</span></div>
-                            <div class="info-row"><span class="label">Due Date</span><span class="value">N/A</span></div>
-                            <div class="info-row"><span class="label">Status</span><span class="value"><span style="color:var(--success);">Fully Paid</span></span></div>
-                            <div style="margin-top:12px;">
-                                <button class="btn" style="font-size:13px;">View Ledger</button>
-                                <button class="btn" style="font-size:13px;">Print Receipt</button>
-                            </div>
-                        </div>
-                        <div class="tab-panel" id="tab-documents">
-                            <div class="info-row"><span class="label">Birth Certificate</span><span class="value"><span class="status-badge">Verified</span></span></div>
-                            <div class="info-row"><span class="label">Marksheet (Class 9)</span><span class="value"><span class="status-badge">Verified</span></span></div>
-                            <div class="info-row"><span class="label">Transfer Certificate</span><span class="value"><span class="status-badge pending">Pending</span></span></div>
-                            <div class="info-row"><span class="label">Aadhaar</span><span class="value"><span class="status-badge">Verified</span></span></div>
-                            <div style="margin-top:12px;">
-                                <button class="btn" style="font-size:13px;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                        <polyline points="17 8 12 3 7 8" />
-                                        <line x1="12" y1="3" x2="12" y2="15" />
-                                    </svg>
-                                    Upload Document
-                                </button>
-                            </div>
+                        <div class="export-group">
+                            <button class="btn btn-outline" id="exportPdfBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="12" y1="18" x2="12" y2="12" />
+                                    <line x1="9" y1="15" x2="12" y2="18" />
+                                    <line x1="15" y1="15" x2="12" y2="18" />
+                                </svg>
+                                PDF
+                            </button>
+                            <button class="btn btn-outline" id="exportExcelBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="8" y1="16" x2="16" y2="16" />
+                                    <line x1="8" y1="12" x2="16" y2="12" />
+                                    <line x1="8" y1="8" x2="10" y2="8" />
+                                </svg>
+                                Excel
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
 
-    <footer class="app-footer">
-        <p>&copy; 2026 ERP·Nexus — Students 360° · all records live</p>
-        <div class="footer-links">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Support</a>
+                <!-- ========== STUDENTS TABLE ========== -->
+                <div class="table-responsive">
+                    <table class="data-table" id="studentsTable">
+                        <thead>
+                            <tr>
+                                <th class="col-checkbox">
+                                    <input type="checkbox" id="selectAll" />
+                                </th>
+                                <th class="col-admission">Admission No</th>
+                                <th class="col-name">Student Name</th>
+                                <th class="col-class">Class</th>
+                                <th class="col-section">Section</th>
+                                <th class="col-father">Father's Name</th>
+                                <th class="col-contact">Contact</th>
+                                <th class="col-status">Status</th>
+                                <th class="col-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsTableBody">
+                            <!-- Static demo data – Phase 1 -->
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-001</td>
+                                <td><a href="student-profile.html" class="student-link">Aarav Sharma</a></td>
+                                <td>10</td>
+                                <td>A</td>
+                                <td>Rajesh Sharma</td>
+                                <td>9876543210</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="student-profile.html" class="action-btn view" title="View">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-001">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-002</td>
+                                <td><a href="student-profile.html" class="student-link">Priya Das</a></td>
+                                <td>8</td>
+                                <td>B</td>
+                                <td>Anjan Das</td>
+                                <td>9876543211</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="student-profile.html" class="action-btn view" title="View">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-002">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-003</td>
+                                <td><a href="student-profile.html" class="student-link">Rohit Gogoi</a></td>
+                                <td>12</td>
+                                <td>A</td>
+                                <td>Mohan Gogoi</td>
+                                <td>9876543212</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="student-profile.html" class="action-btn view" title="View">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-003">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-004</td>
+                                <td><a href="student-profile.html" class="student-link">Sneha Borah</a></td>
+                                <td>5</td>
+                                <td>A</td>
+                                <td>Krishna Borah</td>
+                                <td>9876543213</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="student-profile.html" class="action-btn view" title="View">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-004">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-005</td>
+                                <td><a href="student-profile.html" class="student-link">Arjun Deka</a></td>
+                                <td>9</td>
+                                <td>C</td>
+                                <td>Babul Deka</td>
+                                <td>9876543214</td>
+                                <td><span class="status-badge inactive">Inactive</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="student-profile.html" class="action-btn view" title="View">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-005">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-006</td>
+                                <td><a href="student-profile.html" class="student-link">Ananya Bora</a></td>
+                                <td>7</td>
+                                <td>B</td>
+                                <td>Ramesh Bora</td>
+                                <td>9876543215</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="student-profile.html" class="action-btn view" title="View">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-006">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-007</td>
+                                <td><a href="student-profile.html" class="student-link">Rahul Talukdar</a></td>
+                                <td>11</td>
+                                <td>A</td>
+                                <td>Dhruba Talukdar</td>
+                                <td>9876543216</td>
+                                <td><span class="status-badge transferred">Transferred</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="student-profile.html" class="action-btn view" title="View">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-007">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-008</td>
+                                <td><a href="student-profile.html" class="student-link">Maya Chetia</a></td>
+                                <td>6</td>
+                                <td>C</td>
+                                <td>Paban Chetia</td>
+                                <td>9876543217</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="student-profile.html" class="action-btn view" title="View">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-008">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-009</td>
+                                <td><a href="student-profile.html" class="student-link">Krishna Saikia</a></td>
+                                <td>4</td>
+                                <td>A</td>
+                                <td>Naren Saikia</td>
+                                <td>9876543218</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="student-profile.html" class="action-btn view" title="View">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-009">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="row-checkbox" /></td>
+                                <td>JPA-2026-010</td>
+                                <td><a href="student-profile.html" class="student-link">Deepak Phukan</a></td>
+                                <td>3</td>
+                                <td>B</td>
+                                <td>Bipin Phukan</td>
+                                <td>9876543219</td>
+                                <td><span class="status-badge graduated">Graduated</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="student-profile.html" class="action-btn view" title="View">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                        <a href="edit-student.html" class="action-btn edit" title="Edit">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
+                                        </a>
+                                        <button class="action-btn delete" title="Delete" data-id="JPA-2026-010">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ========== PAGINATION ========== -->
+                <div class="table-footer">
+                    <div class="table-info">
+                        <span>Showing <strong>1</strong> to <strong>10</strong> of <strong>1247</strong> students</span>
+                    </div>
+                    <div class="pagination">
+                        <button class="page-btn" disabled>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6" />
+                            </svg>
+                        </button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">4</button>
+                        <button class="page-btn">5</button>
+                        <span class="page-ellipsis">...</span>
+                        <button class="page-btn">125</button>
+                        <button class="page-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+            </main>
         </div>
-    </footer>
 
-    <script>
-        // Auth check
-        (function() {
-            const loggedIn = sessionStorage.getItem('erp_logged_in');
-            if (!loggedIn) {
-                // For demo, set default if not set
-                if (!sessionStorage.getItem('erp_logged_in')) {
-                    sessionStorage.setItem('erp_logged_in', 'true');
-                    sessionStorage.setItem('erp_user', 'Admin');
-                }
-            }
-        })();
+        <!-- ========== FOOTER ========== -->
+        <footer class="site-footer site-footer--app">
+            <div class="footer-inner">
+                <p class="footer-copy">
+                    &copy; 2026 Janaki Professional Academy. All rights reserved.
+                </p>
+                <p class="footer-powered">
+                    School Management ERP v1.0 &bull; Phase 1 Frontend
+                </p>
+            </div>
+        </footer>
+    </div>
 
-        // Sidebar toggle
-        const hamburger = document.getElementById('hamburgerBtn');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebarOverlay');
+    <!-- ========== DELETE CONFIRMATION MODAL ========== -->
+    <div class="modal-overlay hidden" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Confirm Deletion</h3>
+                <button class="modal-close" id="deleteModalClose">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the student record with Admission No: <strong id="deleteStudentId"></strong>?</p>
+                <p class="modal-warning">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="deleteModalCancel">Cancel</button>
+                <button class="btn btn-danger" id="deleteModalConfirm">Delete</button>
+            </div>
+        </div>
+    </div>
 
-        function toggleSidebar() {
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-        }
-
-        function closeSidebar() {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('active');
-        }
-
-        hamburger.addEventListener('click', toggleSidebar);
-        overlay.addEventListener('click', closeSidebar);
-        sidebar.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= 768) closeSidebar();
-            });
-        });
-
-        // Tab switching
-        document.querySelectorAll('.profile-tabs button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.profile-tabs button').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                const tab = this.dataset.tab;
-                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-                document.getElementById('tab-' + tab).classList.add('active');
-            });
-        });
-
-        // Row click → update profile
-        document.querySelectorAll('#studentTableBody tr').forEach(row => {
-            row.addEventListener('click', function() {
-                const id = this.dataset.id;
-                const name = this.querySelectorAll('td')[1].textContent;
-                const cls = this.querySelectorAll('td')[2].textContent;
-                const sec = this.querySelectorAll('td')[3].textContent;
-                const initials = name.split(' ').map(w => w[0]).join('').toUpperCase();
-
-                document.getElementById('profileName').textContent = name;
-                document.getElementById('profileId').textContent = id + ' · Class ' + cls + '-' + sec;
-                document.querySelector('.profile-avatar').textContent = initials;
-
-                document.querySelectorAll('#studentTableBody tr').forEach(r => r.style.background = '');
-                this.style.background = '#f0f7ff';
-            });
-        });
-        document.querySelector('#studentTableBody tr')?.click();
-    </script>
+    <!-- ========== EXTERNAL JAVASCRIPT ========== -->
+    <script src="js/script.js"></script>
+    <script src="js/toggle.js"></script>
+    <script src="js/students.js"></script>
+    <script src="js/export.js"></script>
 </body>
 </html>

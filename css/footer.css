@@ -1,42 +1,75 @@
-/* ========== FOOTER ========== */
-.app-footer {
-    background: var(--card-bg);
-    border-top: var(--border);
-    padding: 16px 32px;
+/* ============================================
+   FOOTER.CSS
+   Styles for the Application Footer
+   ============================================ */
+
+.site-footer {
+    background: var(--bg-white);
+    border-top: 1px solid var(--border-color);
+    padding: var(--spacing-sm) 0;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.site-footer--app {
+    background: var(--bg-white);
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 100%;
+    padding: 0 var(--spacing-lg);
     flex-wrap: wrap;
-    gap: 12px;
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-top: auto; /* push to bottom if content short */
+    gap: var(--spacing-sm);
 }
 
-.app-footer p {
+.footer-copy {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
     margin: 0;
 }
-.app-footer .footer-links {
-    display: flex;
-    gap: 20px;
-}
-.app-footer .footer-links a {
+
+.footer-powered {
+    font-size: var(--font-size-xs);
     color: var(--text-muted);
-    text-decoration: none;
-    font-size: 13px;
+    margin: 0;
 }
-.app-footer .footer-links a:hover {
-    color: var(--primary);
+
+.footer-powered a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.footer-powered a:hover {
     text-decoration: underline;
 }
 
-@media (max-width: 600px) {
-    .app-footer {
+/* ----- Auth Footer (for login/index pages) ----- */
+.auth-wrapper .site-footer {
+    background: transparent;
+    border-top: 1px solid var(--border-light);
+}
+
+.auth-wrapper .footer-copy,
+.auth-wrapper .footer-powered {
+    color: var(--text-muted);
+    font-size: var(--font-size-xs);
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 576px) {
+    .footer-inner {
         flex-direction: column;
         text-align: center;
-        padding: 12px 16px;
+        padding: 0 var(--spacing-sm);
+        gap: var(--spacing-xs);
     }
-    .app-footer .footer-links {
-        gap: 14px;
+
+    .footer-copy,
+    .footer-powered {
+        font-size: var(--font-size-xs);
     }
 }

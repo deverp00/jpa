@@ -1,114 +1,222 @@
-/* ========== HEADER ========== */
+/* ============================================
+   HEADER.CSS
+   Styles for the Application Header
+   ============================================ */
+
 .app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background: var(--bg-white);
+    border-bottom: 1px solid var(--border-color);
+    z-index: var(--z-header);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-md);
+}
+
+.header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 32px;
-    background: var(--card-bg);
-    border-bottom: var(--border);
-    border-radius: 0; /* no rounding at top */
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: var(--shadow-sm);
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.logo-icon {
-    font-size: 26px;
-    color: var(--primary);
-}
-.logo-text {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-main);
-    letter-spacing: -0.5px;
-}
-
-.header-center {
-    flex: 1;
-    max-width: 400px;
-    margin: 0 20px;
-}
-.search-box {
-    display: flex;
-    align-items: center;
-    background: var(--light-bg);
-    border-radius: var(--border-radius);
-    padding: 6px 16px;
-    border: var(--border);
-}
-.search-box i {
-    color: var(--secondary);
-    margin-right: 10px;
-}
-.search-box input {
-    border: none;
-    background: transparent;
-    outline: none;
-    padding: 8px 0;
-    font-size: 14px;
     width: 100%;
-    color: var(--text-main);
-}
-.search-box input::placeholder {
-    color: var(--text-muted);
+    max-width: 100%;
+    gap: var(--spacing-md);
 }
 
-.header-right {
+/* ----- Hamburger Button (Mobile) ----- */
+.hamburger-btn {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius);
+    transition: background var(--transition-fast);
+}
+
+.hamburger-btn:hover {
+    background: var(--bg-light);
+}
+
+.hamburger-line {
+    width: 24px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+}
+
+/* Hamburger animation when active */
+.hamburger-btn.active .hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ----- Branding ----- */
+.header-brand {
     display: flex;
     align-items: center;
-    gap: 20px;
+    flex-shrink: 0;
 }
-.notif-bell {
-    position: relative;
-    font-size: 20px;
-    color: var(--secondary);
-    cursor: pointer;
+
+.brand-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    color: var(--text-primary);
 }
-.notif-bell .badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: var(--danger);
-    color: white;
-    font-size: 10px;
-    border-radius: 50%;
-    padding: 2px 6px;
-    font-weight: 700;
-    line-height: 1.2;
+
+.brand-link:hover {
+    text-decoration: none;
 }
-.user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: white;
+
+.brand-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 16px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+.brand-name {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+/* ----- Academic Session ----- */
+.header-session {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.session-label {
+    color: var(--text-muted);
+}
+
+.session-value {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+/* ----- User Profile & Logout ----- */
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex-shrink: 0;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: var(--text-white);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.user-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    transition: all var(--transition-fast);
+}
+
+.logout-btn:hover {
+    background: var(--danger-light);
+    color: var(--danger-color);
+}
+
+.logout-btn svg {
+    flex-shrink: 0;
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 992px) {
+    .hamburger-btn {
+        display: flex;
+    }
+
+    .header-session {
+        display: none;
+    }
+
+    .brand-name {
+        font-size: var(--font-size-sm);
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    .logout-text {
+        display: none;
+    }
+
+    .logout-btn {
+        padding: var(--spacing-xs);
+    }
+}
+
+@media (max-width: 576px) {
     .app-header {
-        flex-wrap: wrap;
-        padding: 12px 16px;
+        padding: 0 var(--spacing-sm);
     }
-    .header-center {
-        order: 3;
-        flex: 1 0 100%;
-        margin: 8px 0 0;
-        max-width: 100%;
+
+    .brand-name {
+        font-size: var(--font-size-xs);
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
-    .header-right .notif-bell {
-        font-size: 18px;
+
+    .user-avatar {
+        width: 30px;
+        height: 30px;
+        font-size: var(--font-size-xs);
     }
 }
